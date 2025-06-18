@@ -57,10 +57,11 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private RoleEnums role;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = true,cascade = CascadeType.ALL) // added cascade = CascadeType.ALL for the seeder
+    @OneToOne(fetch = FetchType.LAZY, optional = true, cascade = CascadeType.ALL) // added cascade = CascadeType.ALL for
+                                                                                  // the seeder
     @JoinColumn(name = "school_id", unique = true)
     private School school;
-
+    
     @CreationTimestamp
     private Date createdAt;
 

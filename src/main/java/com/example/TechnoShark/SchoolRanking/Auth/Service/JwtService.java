@@ -14,7 +14,6 @@ import com.example.TechnoShark.SchoolRanking.Auth.Model.CustomUserDetails;
 import com.example.TechnoShark.SchoolRanking.Config.JwtProperties;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolResponse;
 import com.example.TechnoShark.SchoolRanking.Schools.Mapper.SchoolMapper;
-import com.example.TechnoShark.SchoolRanking.Users.DTO.CreateUserResponse;
 import com.example.TechnoShark.SchoolRanking.Users.DTO.JwtUserResponse;
 import com.example.TechnoShark.SchoolRanking.Users.Model.User;
 

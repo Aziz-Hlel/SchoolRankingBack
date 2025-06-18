@@ -45,13 +45,9 @@ import lombok.extern.slf4j.Slf4j;
 public class SchoolSeeder {
     private final UserRepo userRepo;
     private final SchoolRepo schoolRepo;
-    private final SchoolAcademicsRepo schoolAcademicsRepo;
-    private final SchoolFacilitiesRepo schoolFacilitiesRepo;
-    private final SchoolMediaRepo schoolMediaRepo;
-    private final SchoolStaffRepo schoolStaffRepo;
     private final PasswordEncoder passwordEncoder;
 
-    private final int numberOfSeeds = 1;
+    private final int numberOfSeeds = 3;
 
     public int getNumberofLanguagesOfInstruction() {
         return ThreadLocalRandom.current().nextInt(1, 10);
