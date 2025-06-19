@@ -2,8 +2,8 @@ package com.example.TechnoShark.SchoolRanking.Schools.DTO;
 
 import java.util.UUID;
 
-import com.example.TechnoShark.SchoolRanking.Enums.Country;
-import com.example.TechnoShark.SchoolRanking.Enums.SchoolType;
+import com.example.TechnoShark.SchoolRanking.Enums.CountryEnums;
+import com.example.TechnoShark.SchoolRanking.Enums.SchoolTypeEnums;
 
 import lombok.Builder;
 import lombok.Data;
@@ -18,8 +18,8 @@ public class SchoolResponse {
     private String phoneNumber;
     private String email;
     private Integer yearEstablished;
-    private SchoolType type;
+    private SchoolTypeEnums type;
     private String website;
-    private Country country;
+    private CountryEnums country;
 
 }

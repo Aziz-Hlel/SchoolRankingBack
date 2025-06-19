@@ -5,8 +5,11 @@ import java.util.UUID;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.springframework.data.domain.Page;
 
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolDetailedResponse;
+import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolDetailedResponse2;
+import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolPageResponse;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolRequest;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolResponse;
 import com.example.TechnoShark.SchoolRanking.Schools.Model.School;
@@ -31,17 +34,29 @@ public interface SchoolMapper {
     @Mapping(target = "schoolStaff", ignore = true)
     School toEntity(SchoolRequest dto, User user);
 
-    @Mapping(target = "id", source = "schoolId")
-    @Mapping(target = "user", source = "userId")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "user", ignore = true)
     @Mapping(target = "schoolAcademics", ignore = true)
     @Mapping(target = "schoolFacilities", ignore = true)
     @Mapping(target = "schoolMedia", ignore = true)
     @Mapping(target = "schoolStaff", ignore = true)
-    void updateSchoolFromDto(SchoolRequest dto, UUID schoolId, UUID userId, @MappingTarget School entity);
+    School updateSchoolFromDto(SchoolRequest dto, @MappingTarget School entity);
 
     SchoolResponse toDto(School school);
 
+    default String mapAdminUsername(School school) {
+        if (school.getUser() == null)
+            return null;
+        return school.getUser().getFirstName() + " " + school.getUser().getLastName();
+    }
+
+    @Mapping(target = "adminUsername", expression = "java(mapAdminUsername(school))")
+    @Mapping(target = "isComplete", constant = "true")
+    SchoolPageResponse toPageDto(School school);
+
     SchoolDetailedResponse toDetailedDto(School school);
 
+    @Mapping(target = "schoolGeneral", source = "school")
+    SchoolDetailedResponse2 toDetailedDto2(School school);
 
 }

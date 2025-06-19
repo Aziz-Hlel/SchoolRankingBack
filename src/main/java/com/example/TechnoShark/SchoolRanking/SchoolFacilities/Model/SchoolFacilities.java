@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import com.example.TechnoShark.SchoolRanking.Enums.AccessibilityEnums;
 import com.example.TechnoShark.SchoolRanking.Enums.FacilityEnums;
-import com.example.TechnoShark.SchoolRanking.Enums.RatingLevel;
+import com.example.TechnoShark.SchoolRanking.Enums.RatingLevelEnums;
 import com.example.TechnoShark.SchoolRanking.Enums.SustainabilityEnums;
 import com.example.TechnoShark.SchoolRanking.Schools.Model.School;
 
@@ -77,7 +77,7 @@ public class SchoolFacilities {
     private Boolean aiIntegration;
 
     @Enumerated(EnumType.STRING)
-    private RatingLevel technologyReadiness;
+    private RatingLevelEnums technologyReadiness;
 
     private String awardsAndRecognitions;
 }

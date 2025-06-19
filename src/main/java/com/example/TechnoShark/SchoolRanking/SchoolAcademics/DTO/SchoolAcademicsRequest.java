@@ -4,7 +4,7 @@ import java.util.Set;
 
 import com.example.TechnoShark.SchoolRanking.Enums.AccreditationEnums;
 import com.example.TechnoShark.SchoolRanking.Enums.CurriculumEnums;
-import com.example.TechnoShark.SchoolRanking.Enums.LevelsEnums;
+import com.example.TechnoShark.SchoolRanking.Enums.LevelEnums;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -23,7 +23,7 @@ public class SchoolAcademicsRequest {
     private String accreditationDocsLinks;
 
     @NotNull
-    private Set<LevelsEnums> levelsOffered;
+    private Set<LevelEnums> levelsOffered;
 
     @NotNull
     private Set<CurriculumEnums> curriculums;

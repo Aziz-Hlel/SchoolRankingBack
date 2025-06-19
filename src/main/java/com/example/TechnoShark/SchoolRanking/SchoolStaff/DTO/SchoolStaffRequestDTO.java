@@ -6,8 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.example.TechnoShark.SchoolRanking.Enums.Country;
-import com.example.TechnoShark.SchoolRanking.Enums.Languages;
+import com.example.TechnoShark.SchoolRanking.Enums.CountryEnums;
+import com.example.TechnoShark.SchoolRanking.Enums.LanguageEnums;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.annotation.Nullable;
@@ -38,12 +38,12 @@ public class SchoolStaffRequestDTO {
                                                                                   // @NotNull when you're checking for
                                                                                   // “must not be empty”
 
-    private Set<Country> teacherNationalities =  new HashSet<>(); // Initialize List, Set, or Map fields when they’re
+    private Set<CountryEnums> teacherNationalities =  new HashSet<>(); // Initialize List, Set, or Map fields when they’re
                                                                     // required or iterated over later
 
     @NotNull(message = "Teacher languages must not be null")
     @Size(min = 1, message = "At least one teacher language must be provided")
-    private Set<Languages> teacherLanguages =  new HashSet<>();
+    private Set<LanguageEnums> teacherLanguages =  new HashSet<>();
 
     @NotBlank
     private String professionalDevelopment;

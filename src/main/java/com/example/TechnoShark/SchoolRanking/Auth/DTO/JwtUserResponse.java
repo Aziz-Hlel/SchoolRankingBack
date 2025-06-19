@@ -1,4 +1,4 @@
-package com.example.TechnoShark.SchoolRanking.Users.DTO;
+package com.example.TechnoShark.SchoolRanking.Auth.DTO;
 
 import java.util.UUID;
 

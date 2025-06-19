@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.example.TechnoShark.SchoolRanking.Enums.AccessibilityEnums;
 import com.example.TechnoShark.SchoolRanking.Enums.FacilityEnums;
-import com.example.TechnoShark.SchoolRanking.Enums.RatingLevel;
+import com.example.TechnoShark.SchoolRanking.Enums.RatingLevelEnums;
 import com.example.TechnoShark.SchoolRanking.Enums.SustainabilityEnums;
 
 import jakarta.validation.constraints.NotBlank;
@@ -35,7 +35,7 @@ public class SchoolFacilitiesRequest {
 
     private Boolean aiIntegration;
 
-    private RatingLevel technologyReadiness;
+    private RatingLevelEnums technologyReadiness;
 
     @NotNull
     private List<String> industryPartnerships;

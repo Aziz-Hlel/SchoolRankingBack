@@ -27,11 +27,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class GlobalExceptionHandler {
 
-        // @ExceptionHandler(BadCredentialsException.class)
-        // public ResponseEntity<?> handleBadCredentials(BadCredentialsException ex) {
-        //         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-        //                         .body(Map.of("error", "Unauthorized", "message", ex.getMessage()));
-        // }
+        @ExceptionHandler(BadCredentialsException.class)
+        public ResponseEntity<?> handleBadCredentials(BadCredentialsException ex) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                                .body(Map.of("error", "Unauthorized", "message", ex.getMessage()));
+        }
 
         // this one catches exceptions throw by spring security at the controller level
         // ( like when using @PreAuthorize)

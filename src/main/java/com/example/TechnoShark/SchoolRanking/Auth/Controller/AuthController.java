@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.TechnoShark.SchoolRanking.Auth.DTO.AuthResponse;
+import com.example.TechnoShark.SchoolRanking.Auth.DTO.JwtUserResponse;
 import com.example.TechnoShark.SchoolRanking.Auth.DTO.LoginRequest;
 import com.example.TechnoShark.SchoolRanking.Auth.DTO.RefreshTokenRequest;
 import com.example.TechnoShark.SchoolRanking.Auth.DTO.TokenRefreshResponse;
@@ -31,7 +32,6 @@ import com.example.TechnoShark.SchoolRanking.Auth.Service.JwtService;
 import com.example.TechnoShark.SchoolRanking.Auth.Util.UserContext;
 import com.example.TechnoShark.SchoolRanking.Config.JwtProperties;
 import com.example.TechnoShark.SchoolRanking.ErrorHandler.Exceptions.InvalidTokenException;
-import com.example.TechnoShark.SchoolRanking.Users.DTO.JwtUserResponse;
 import com.example.TechnoShark.SchoolRanking.Users.Model.User;
 import com.example.TechnoShark.SchoolRanking.Utils.ApiResponse;
 

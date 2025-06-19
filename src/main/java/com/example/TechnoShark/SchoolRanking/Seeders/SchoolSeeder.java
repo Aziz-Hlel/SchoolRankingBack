@@ -13,14 +13,14 @@ import org.springframework.stereotype.Component;
 
 import com.example.TechnoShark.SchoolRanking.Enums.AccessibilityEnums;
 import com.example.TechnoShark.SchoolRanking.Enums.AccreditationEnums;
-import com.example.TechnoShark.SchoolRanking.Enums.Country;
+import com.example.TechnoShark.SchoolRanking.Enums.CountryEnums;
 import com.example.TechnoShark.SchoolRanking.Enums.CurriculumEnums;
 import com.example.TechnoShark.SchoolRanking.Enums.FacilityEnums;
-import com.example.TechnoShark.SchoolRanking.Enums.Languages;
-import com.example.TechnoShark.SchoolRanking.Enums.LevelsEnums;
-import com.example.TechnoShark.SchoolRanking.Enums.RatingLevel;
+import com.example.TechnoShark.SchoolRanking.Enums.LanguageEnums;
+import com.example.TechnoShark.SchoolRanking.Enums.LevelEnums;
+import com.example.TechnoShark.SchoolRanking.Enums.RatingLevelEnums;
 import com.example.TechnoShark.SchoolRanking.Enums.RoleEnums;
-import com.example.TechnoShark.SchoolRanking.Enums.SchoolType;
+import com.example.TechnoShark.SchoolRanking.Enums.SchoolTypeEnums;
 import com.example.TechnoShark.SchoolRanking.Enums.SustainabilityEnums;
 import com.example.TechnoShark.SchoolRanking.SchoolAcademics.Model.SchoolAcademics;
 import com.example.TechnoShark.SchoolRanking.SchoolAcademics.Repo.SchoolAcademicsRepo;
@@ -47,7 +47,7 @@ public class SchoolSeeder {
     private final SchoolRepo schoolRepo;
     private final PasswordEncoder passwordEncoder;
 
-    private final int numberOfSeeds = 3;
+    private final int numberOfSeeds = 10;
 
     public int getNumberofLanguagesOfInstruction() {
         return ThreadLocalRandom.current().nextInt(1, 10);
@@ -100,13 +100,13 @@ public class SchoolSeeder {
             // --- 2. Create School ---
             School school = new School();
             school.setName("school" + i);
-            school.setCountry(getRandomEnumValue(Country.class));
-            school.setCity("school" + i);
-            school.setAddress("school" + i + " address");
+            school.setCountry(getRandomEnumValue(CountryEnums.class));
+            school.setCity("city" + i);
+            school.setAddress("adress" + i);
             school.setPhoneNumber("0000000" + i);
             school.setEmail("school" + i + "@example.com");
             school.setYearEstablished(2000 + i);
-            school.setType(getRandomEnumValue(SchoolType.class));
+            school.setType(getRandomEnumValue(SchoolTypeEnums.class));
             school.setWebsite("https://school" + i + ".tn");
 
             // --- 3. Create Academics BEFORE saving school ---
@@ -116,7 +116,7 @@ public class SchoolSeeder {
             academics.setLanguagesOfInstruction(getNumberofLanguagesOfInstruction());
             academics.setCurriculums(getRandomEnumSet(CurriculumEnums.class));
             academics.setInternationalAccreditations(getRandomEnumSet(AccreditationEnums.class));
-            academics.setLevelsOffered(getRandomEnumSet(LevelsEnums.class));
+            academics.setLevelsOffered(getRandomEnumSet(LevelEnums.class));
 
             // Set the relationship on both sides
             school.setSchoolAcademics(academics);
@@ -133,7 +133,7 @@ public class SchoolSeeder {
             facilities.setIndustryPartnerships(Set.of("industry partnership 1", "industry partnership 2"));
             facilities.setSafetyCompliance(getRandomBoolean());
             facilities.setAiIntegration(getRandomBoolean());
-            facilities.setTechnologyReadiness(getRandomEnumValue(RatingLevel.class));
+            facilities.setTechnologyReadiness(getRandomEnumValue(RatingLevelEnums.class));
             facilities.setAwardsAndRecognitions("school" + i + " awards and recognitions");
 
             facilities.setSchool(school);
@@ -153,8 +153,8 @@ public class SchoolSeeder {
             staff.setLeadershipTeam("school" + i + " leadership team");
             staff.setProfessionalDevelopment("school" + i + " professional development");
             staff.setStaffSizeEstimate(getRandomNumber(5, 50));
-            staff.setTeacherLanguages(getRandomEnumSet(Languages.class));
-            staff.setTeacherNationalities(getRandomEnumSet(Country.class));
+            staff.setTeacherLanguages(getRandomEnumSet(LanguageEnums.class));
+            staff.setTeacherNationalities(getRandomEnumSet(CountryEnums.class));
             staff.setTeacherQualifications("school" + i + " teacher qualifications");
             staff.setLastInspectionDate(getRandomLocalDate(LocalDate.of(2000, 1, 1), LocalDate.of(2025, 1, 1)));
 

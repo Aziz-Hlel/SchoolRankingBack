@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import com.example.TechnoShark.SchoolRanking.Enums.AccreditationEnums;
 import com.example.TechnoShark.SchoolRanking.Enums.CurriculumEnums;
-import com.example.TechnoShark.SchoolRanking.Enums.LevelsEnums;
+import com.example.TechnoShark.SchoolRanking.Enums.LevelEnums;
 import com.example.TechnoShark.SchoolRanking.Schools.Model.School;
 
 import jakarta.persistence.CollectionTable;
@@ -53,11 +53,11 @@ public class SchoolAcademics {
 
     // this is chat recommendation for the best approach for the case of multiple
     // values that are fixed and relativly small
-    @ElementCollection(targetClass = LevelsEnums.class, fetch = FetchType.EAGER)
+    @ElementCollection(targetClass = LevelEnums.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "school_levels", joinColumns = @JoinColumn(name = "school_id"))
     @Column(name = "level")
-    private Set<LevelsEnums> levelsOffered;
+    private Set<LevelEnums> levelsOffered;
 
     @ElementCollection(targetClass = CurriculumEnums.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)

@@ -2,8 +2,8 @@ package com.example.TechnoShark.SchoolRanking.Schools.Model;
 
 import java.util.UUID;
 
-import com.example.TechnoShark.SchoolRanking.Enums.Country;
-import com.example.TechnoShark.SchoolRanking.Enums.SchoolType;
+import com.example.TechnoShark.SchoolRanking.Enums.CountryEnums;
+import com.example.TechnoShark.SchoolRanking.Enums.SchoolTypeEnums;
 import com.example.TechnoShark.SchoolRanking.SchoolAcademics.Model.SchoolAcademics;
 import com.example.TechnoShark.SchoolRanking.SchoolFacilities.Model.SchoolFacilities;
 import com.example.TechnoShark.SchoolRanking.SchoolMedia.Model.SchoolMedia;
@@ -42,7 +42,7 @@ public class School {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Country country;
+    private CountryEnums country;
 
     @Column(nullable = false)
     private String city;
@@ -61,7 +61,7 @@ public class School {
                                      // is more of a database convention
 
     @Column(nullable = false)
-    private SchoolType type;
+    private SchoolTypeEnums type;
 
     @Column
     private String website;

@@ -5,8 +5,8 @@ import java.util.UUID;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.example.TechnoShark.SchoolRanking.Auth.DTO.JwtUserResponse;
 import com.example.TechnoShark.SchoolRanking.Auth.Model.CustomUserDetails;
-import com.example.TechnoShark.SchoolRanking.Users.DTO.JwtUserResponse;
 import com.example.TechnoShark.SchoolRanking.Users.Model.User;
 
 public class UserContext {

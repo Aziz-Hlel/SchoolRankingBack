@@ -75,7 +75,7 @@ public class UserService {
         User updatedUser = userRepo.save(updatedEntity);
 
         UserResponse dto = userMapper.toDto(updatedUser);
- 
+
         return dto;
     }
 
@@ -103,7 +103,7 @@ public class UserService {
         Page<User> users = userRepo.findAll(pageable);
         Page<UserPageResponse> page = users.map(userMapper::toPageDto);
 
-        return userRepo.findAll(pageable).map(userMapper::toPageDto);
+        return page;
     }
 
 }

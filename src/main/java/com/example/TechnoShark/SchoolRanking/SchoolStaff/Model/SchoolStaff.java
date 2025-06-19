@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import com.example.TechnoShark.SchoolRanking.Enums.Country;
-import com.example.TechnoShark.SchoolRanking.Enums.Languages;
+import com.example.TechnoShark.SchoolRanking.Enums.CountryEnums;
+import com.example.TechnoShark.SchoolRanking.Enums.LanguageEnums;
 import com.example.TechnoShark.SchoolRanking.Schools.Model.School;
 
 import jakarta.persistence.CollectionTable;
@@ -54,17 +54,17 @@ public class SchoolStaff {
     @Column(nullable = true)
     private String professionalDevelopment;
 
-    @ElementCollection(targetClass = Country.class)
+    @ElementCollection(targetClass = CountryEnums.class)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "school_staff_nationalities", joinColumns = @JoinColumn(name = "school_staff_id"))
     @Column(name = "country")
-    private Set<Country> teacherNationalities;
+    private Set<CountryEnums> teacherNationalities;
 
-    @ElementCollection(targetClass = Languages.class)
+    @ElementCollection(targetClass = LanguageEnums.class)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "school_staff_languages", joinColumns = @JoinColumn(name = "school_staff_id"))
     @Column(name = "language")
-    private Set<Languages> teacherLanguages;
+    private Set<LanguageEnums> teacherLanguages;
 
     @Column(nullable = true)
     private LocalDate lastInspectionDate;

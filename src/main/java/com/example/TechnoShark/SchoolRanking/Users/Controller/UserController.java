@@ -22,10 +22,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.TechnoShark.SchoolRanking.Auth.DTO.JwtUserResponse;
 import com.example.TechnoShark.SchoolRanking.Auth.Util.UserContext;
 import com.example.TechnoShark.SchoolRanking.ErrorHandler.Exceptions.ResourceNotFoundException;
 import com.example.TechnoShark.SchoolRanking.Users.DTO.CreateUserRequest;
-import com.example.TechnoShark.SchoolRanking.Users.DTO.JwtUserResponse;
 import com.example.TechnoShark.SchoolRanking.Users.DTO.UpdateUserRequest;
 import com.example.TechnoShark.SchoolRanking.Users.DTO.UserPageResponse;
 import com.example.TechnoShark.SchoolRanking.Users.DTO.UserResponse;

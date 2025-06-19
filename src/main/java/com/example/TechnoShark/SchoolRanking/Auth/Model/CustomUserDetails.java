@@ -8,8 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.example.TechnoShark.SchoolRanking.Users.DTO.JwtUserResponse;
-import com.example.TechnoShark.SchoolRanking.Users.DTO.JwtUserResponse;
+import com.example.TechnoShark.SchoolRanking.Auth.DTO.JwtUserResponse;
 import com.example.TechnoShark.SchoolRanking.Users.Model.User;
 
 import lombok.Data;

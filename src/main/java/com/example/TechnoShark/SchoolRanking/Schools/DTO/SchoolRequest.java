@@ -2,8 +2,8 @@ package com.example.TechnoShark.SchoolRanking.Schools.DTO;
 
 import org.hibernate.validator.constraints.URL;
 
-import com.example.TechnoShark.SchoolRanking.Enums.Country;
-import com.example.TechnoShark.SchoolRanking.Enums.SchoolType;
+import com.example.TechnoShark.SchoolRanking.Enums.CountryEnums;
+import com.example.TechnoShark.SchoolRanking.Enums.SchoolTypeEnums;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Email;
@@ -20,7 +20,7 @@ public class SchoolRequest {
     private String name;
 
     @NotNull
-    private Country country;
+    private CountryEnums country;
 
     @NotBlank
     private String city;
@@ -46,6 +46,6 @@ public class SchoolRequest {
     private String website;
 
     @NotNull
-    private SchoolType type;
+    private SchoolTypeEnums type;
 
 }

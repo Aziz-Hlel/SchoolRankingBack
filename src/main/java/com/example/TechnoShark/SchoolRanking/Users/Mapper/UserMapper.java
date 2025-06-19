@@ -22,6 +22,7 @@ public interface UserMapper {
     @Mapping(target = "role", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "authorities", ignore = true)
+    @Mapping(target = "password", ignore = true)
     User toUpdatedEntity(UpdateUserRequest userRequest, @MappingTarget User Entity);
 
 

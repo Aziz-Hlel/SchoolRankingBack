@@ -1,6 +1,6 @@
 package com.example.TechnoShark.SchoolRanking.Enums;
 
-public enum LevelsEnums {
+public enum LevelEnums {
     KG,
     PRIMARY,
     MIDDLE_SCHOOL,

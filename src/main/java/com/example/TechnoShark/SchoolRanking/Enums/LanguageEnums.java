@@ -1,6 +1,6 @@
 package com.example.TechnoShark.SchoolRanking.Enums;
 
-public enum Languages {
+public enum LanguageEnums {
 
     English,
     Spanish,

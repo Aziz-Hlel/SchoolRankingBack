@@ -1,13 +1,13 @@
 package com.example.TechnoShark.SchoolRanking.Enums;
 
-public enum Country {
+public enum CountryEnums {
     USA("United States"),
     FRANCE("France"),
     MOROCCO("Maroc");
 
     private final String displayName;
 
-    Country(String displayName) {
+    CountryEnums(String displayName) {
         this.displayName = displayName;
     }
 
