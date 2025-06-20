@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolDetailedResponse;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolDetailedResponse2;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolPageResponse;
+import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolProgressResponse;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolRequest;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolResponse;
 import com.example.TechnoShark.SchoolRanking.Schools.Model.School;
@@ -32,6 +33,8 @@ public interface SchoolMapper {
     @Mapping(target = "schoolFacilities", ignore = true)
     @Mapping(target = "schoolMedia", ignore = true)
     @Mapping(target = "schoolStaff", ignore = true)
+    @Mapping(target = "formsCompleted", constant = "true")
+    @Mapping(target = "lastFormStep", ignore = true)
     School toEntity(SchoolRequest dto, User user);
 
     @Mapping(target = "id", ignore = true)
@@ -40,6 +43,8 @@ public interface SchoolMapper {
     @Mapping(target = "schoolFacilities", ignore = true)
     @Mapping(target = "schoolMedia", ignore = true)
     @Mapping(target = "schoolStaff", ignore = true)
+    @Mapping(target = "formsCompleted", ignore = true)
+    @Mapping(target = "lastFormStep", ignore = true)
     School updateSchoolFromDto(SchoolRequest dto, @MappingTarget School entity);
 
     SchoolResponse toDto(School school);
@@ -58,5 +63,7 @@ public interface SchoolMapper {
 
     @Mapping(target = "schoolGeneral", source = "school")
     SchoolDetailedResponse2 toDetailedDto2(School school);
+
+    SchoolProgressResponse toProgressDto(School school);
 
 }

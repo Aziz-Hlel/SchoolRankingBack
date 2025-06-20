@@ -6,11 +6,9 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,15 +19,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.TechnoShark.SchoolRanking.Auth.DTO.JwtUserResponse;
-import com.example.TechnoShark.SchoolRanking.Auth.Model.CustomUserDetails;
 import com.example.TechnoShark.SchoolRanking.Auth.Util.UserContext;
-import com.example.TechnoShark.SchoolRanking.Config.AppProperties;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolDetailedResponse2;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolPageRequest;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolPageResponse;
+import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolProgressResponse;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolRequest;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolResponse;
-import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolPageRequest;
 import com.example.TechnoShark.SchoolRanking.Schools.Service.SchoolService;
 import com.example.TechnoShark.SchoolRanking.Utils.ApiResponse;
 
@@ -110,6 +106,27 @@ public class SchoolController {
 
         return ResponseEntity.ok(apiResponse);
 
+    }
+
+    @GetMapping("/form-progress")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ApiResponse<SchoolProgressResponse>> getFormProgress() {
+
+        JwtUserResponse user = UserContext.getCurrentUser();
+
+        UUID schoolId = user.getSchoolId();
+
+        SchoolProgressResponse schoolProgressResponse = schoolService.getFormProgress(schoolId);
+
+        ApiResponse<SchoolProgressResponse> apiResponse = ApiResponse.<SchoolProgressResponse>builder()
+                .message("School form progress retrieved successfully")
+                .success(true)
+                .data(schoolProgressResponse)
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.OK)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
     }
 
 }

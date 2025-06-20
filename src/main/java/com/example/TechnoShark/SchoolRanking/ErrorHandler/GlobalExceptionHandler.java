@@ -205,6 +205,8 @@ public class GlobalExceptionHandler {
         @ExceptionHandler(Exception.class)
         public ResponseEntity<ErrorResponse> handleGeneric(Exception ex, HttpServletRequest request) {
 
+                log.error("Unhandled exception occurred", ex); // full stack trace in logs
+
                 ErrorResponse errorResponse = ErrorResponse.builder()
                                 .message(ex.getMessage())
                                 .path(request.getRequestURI())

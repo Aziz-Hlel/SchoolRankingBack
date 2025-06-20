@@ -11,8 +11,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.example.TechnoShark.SchoolRanking.Auth.DTO.JwtUserResponse;
 import com.example.TechnoShark.SchoolRanking.Enums.RoleEnums;
+import com.example.TechnoShark.SchoolRanking.ErrorHandler.Exceptions.ResourceNotFoundException;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolDetailedResponse2;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolPageResponse;
+import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolProgressResponse;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolRequest;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolResponse;
 import com.example.TechnoShark.SchoolRanking.Schools.Mapper.SchoolMapper;
@@ -91,5 +93,16 @@ public class SchoolService {
         School school = schoolRepo.findWithDetailsById(schoolId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "School not found"));
         return schoolMapper.toDetailedDto2(school);
+    }
+
+    @Transactional
+    public SchoolProgressResponse getFormProgress(UUID schoolId) {
+
+        School school = schoolRepo.findById(schoolId)
+                .orElseThrow(() -> new ResourceNotFoundException("School not found"));
+
+        SchoolProgressResponse schoolProgressResponse = schoolMapper.toProgressDto(school);
+
+        return schoolProgressResponse;
     }
 }
