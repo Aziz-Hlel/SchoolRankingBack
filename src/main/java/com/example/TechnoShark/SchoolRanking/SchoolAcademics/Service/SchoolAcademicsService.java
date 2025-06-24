@@ -14,6 +14,7 @@ import com.example.TechnoShark.SchoolRanking.SchoolAcademics.Model.SchoolAcademi
 import com.example.TechnoShark.SchoolRanking.SchoolAcademics.Repo.SchoolAcademicsRepo;
 import com.example.TechnoShark.SchoolRanking.Schools.Model.School;
 import com.example.TechnoShark.SchoolRanking.Schools.Repo.SchoolRepo;
+import com.example.TechnoShark.SchoolRanking.Schools.Service.FormProgressService;
 
 import lombok.AllArgsConstructor;
 
@@ -21,19 +22,21 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class SchoolAcademicsService {
 
-    private SchoolAcademicsRepo school_AcademicsRepo;
-    private SchoolAcademicsMapper school_AcademicsMapper;
-    private SchoolRepo schoolRepo;
+    private final SchoolAcademicsRepo school_AcademicsRepo;
+    private final SchoolRepo schoolRepo;
+    private final SchoolAcademicsMapper school_AcademicsMapper;
+    private final FormProgressService formProgressService;
 
     public UUID create(SchoolAcademicsRequest school_AcademicsRequest, UUID schooldId) {
 
-        Optional<School> school = schoolRepo.findById(schooldId);
+        School school = schoolRepo.findById(schooldId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "School not found"));
 
-        if (!school.isPresent())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "School not found");
-        SchoolAcademics newEntity = school_AcademicsMapper.toEntity(school_AcademicsRequest, school.get());
+        SchoolAcademics newEntity = school_AcademicsMapper.toEntity(school_AcademicsRequest, school);
 
         SchoolAcademics savedEntity = school_AcademicsRepo.save(newEntity);
+
+        formProgressService.updateFormProgress(schooldId, 2);
 
         return savedEntity.getId();
     }
@@ -61,5 +64,5 @@ public class SchoolAcademicsService {
         return school_AcademicsMapper.toDto(school_Academics.get());
 
     }
-    
+
 }

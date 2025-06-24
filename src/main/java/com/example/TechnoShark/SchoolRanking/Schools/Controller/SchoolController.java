@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.TechnoShark.SchoolRanking.Auth.DTO.JwtUserResponse;
 import com.example.TechnoShark.SchoolRanking.Auth.Util.UserContext;
@@ -46,7 +47,10 @@ public class SchoolController {
     public ResponseEntity<String> createSchool(@Valid @RequestBody SchoolRequest schoolRequest) {
 
         UUID userId = UserContext.getCurrentUserId();
-
+        JwtUserResponse user = UserContext.getCurrentUser();
+        if (user.getSchoolId() != null) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already has a school");
+        }
         String schooldId = schoolService.create(schoolRequest, userId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(schooldId);
@@ -101,7 +105,7 @@ public class SchoolController {
                 .success(true)
                 .data(school)
                 .timestamp(LocalDateTime.now())
-                .status(HttpStatus.CREATED)
+                .status(HttpStatus.OK)
                 .build();
 
         return ResponseEntity.ok(apiResponse);

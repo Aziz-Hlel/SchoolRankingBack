@@ -98,6 +98,10 @@ public class SchoolService {
     @Transactional
     public SchoolProgressResponse getFormProgress(UUID schoolId) {
 
+        if (schoolId == null) {
+            return new SchoolProgressResponse(false, 0);
+        }
+
         School school = schoolRepo.findById(schoolId)
                 .orElseThrow(() -> new ResourceNotFoundException("School not found"));
 

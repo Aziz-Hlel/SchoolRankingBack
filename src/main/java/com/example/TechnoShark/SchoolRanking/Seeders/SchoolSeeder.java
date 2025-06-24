@@ -23,13 +23,9 @@ import com.example.TechnoShark.SchoolRanking.Enums.RoleEnums;
 import com.example.TechnoShark.SchoolRanking.Enums.SchoolTypeEnums;
 import com.example.TechnoShark.SchoolRanking.Enums.SustainabilityEnums;
 import com.example.TechnoShark.SchoolRanking.SchoolAcademics.Model.SchoolAcademics;
-import com.example.TechnoShark.SchoolRanking.SchoolAcademics.Repo.SchoolAcademicsRepo;
 import com.example.TechnoShark.SchoolRanking.SchoolFacilities.Model.SchoolFacilities;
-import com.example.TechnoShark.SchoolRanking.SchoolFacilities.Repo.SchoolFacilitiesRepo;
 import com.example.TechnoShark.SchoolRanking.SchoolMedia.Model.SchoolMedia;
-import com.example.TechnoShark.SchoolRanking.SchoolMedia.Repo.SchoolMediaRepo;
 import com.example.TechnoShark.SchoolRanking.SchoolStaff.Model.SchoolStaff;
-import com.example.TechnoShark.SchoolRanking.SchoolStaff.Repo.SchoolStaffRepo;
 import com.example.TechnoShark.SchoolRanking.Schools.Model.School;
 import com.example.TechnoShark.SchoolRanking.Schools.Repo.SchoolRepo;
 import com.example.TechnoShark.SchoolRanking.Users.Model.User;
@@ -51,7 +47,6 @@ public class SchoolSeeder {
 
     public int getNumberofLanguagesOfInstruction() {
         return ThreadLocalRandom.current().nextInt(1, 10);
-
     }
 
     public int getRandomNumber(int min, int max) {
@@ -89,11 +84,45 @@ public class SchoolSeeder {
         return LocalDate.ofEpochDay(randomDay);
     }
 
+    private void createCustomUser() {
+
+        int currentForm = 1;
+        boolean isCompleted = false;
+
+        School schoolEntity = new School();
+        schoolEntity.setName("custom school");
+        schoolEntity.setCountry(getRandomEnumValue(CountryEnums.class));
+        schoolEntity.setCity("custom city");
+        schoolEntity.setAddress("adress");
+        schoolEntity.setPhoneNumber("0000000");
+        schoolEntity.setEmail("custom_school" + "@example.com");
+        schoolEntity.setYearEstablished(2000);
+        schoolEntity.setType(getRandomEnumValue(SchoolTypeEnums.class));
+        schoolEntity.setWebsite("https://school" + ".tn");
+        schoolEntity.setLastFormStep(currentForm);
+        schoolEntity.setFormsCompleted(isCompleted);
+
+        School school = schoolRepo.save(schoolEntity);
+
+        User manualUser = User.builder()
+                .firstName("Admin")
+                .lastName("")
+                .email("admin@example.com")
+                .password(passwordEncoder.encode("admin"))
+                .role(RoleEnums.ADMIN)
+                .school(school) // Set school reference
+                .build();
+
+        User user = userRepo.save(manualUser);
+    }
+
     @Transactional
     public void seed() {
 
         if (schoolRepo.count() != 0)
             return;
+
+        createCustomUser();
 
         for (int i = 1; i <= numberOfSeeds; i++) {
 

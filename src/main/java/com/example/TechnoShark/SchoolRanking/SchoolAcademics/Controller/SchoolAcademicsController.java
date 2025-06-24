@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.TechnoShark.SchoolRanking.Auth.DTO.JwtUserResponse;
+import com.example.TechnoShark.SchoolRanking.Auth.Util.UserContext;
 import com.example.TechnoShark.SchoolRanking.Config.AppProperties;
 import com.example.TechnoShark.SchoolRanking.SchoolAcademics.DTO.SchoolAcademicsRequest;
 import com.example.TechnoShark.SchoolRanking.SchoolAcademics.DTO.SchoolAcademicsResponse;
@@ -30,24 +32,33 @@ public class SchoolAcademicsController {
 
     @PostMapping({ "", "/" })
     public ResponseEntity<UUID> create(@RequestBody @Valid SchoolAcademicsRequest school_AcademicsRequest) {
-        UUID schoolId = UUID.fromString(appProperties.getSchoolId());
+
+        UUID schoolId = UserContext.getCurrentSchoolId();
+
         UUID schoolAcademicsId = school_AcademicsService.create(school_AcademicsRequest, schoolId);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(schoolAcademicsId);
     }
 
     @PutMapping({ "", "/" })
     public ResponseEntity<SchoolAcademicsResponse> update(
             @RequestBody @Valid SchoolAcademicsRequest school_AcademicsRequest) {
-        UUID schoolId = UUID.fromString(appProperties.getSchoolId());
+
+        UUID schoolId = UserContext.getCurrentSchoolId();
+
         SchoolAcademicsResponse updatedEntity = school_AcademicsService.update(school_AcademicsRequest, schoolId);
+
         return ResponseEntity.status(HttpStatus.OK).body(updatedEntity);
     }
 
     @GetMapping("/{schoolAcademicsId}")
     public ResponseEntity<SchoolAcademicsResponse> get(@PathVariable UUID schoolAcademicsId) {
-        // UUID schoolId = UUID.fromString(appProperties.getSchoolId());
+        // UUID schoolId = UserContext.getCurrentSchoolId();
+
         SchoolAcademicsResponse schooldId = school_AcademicsService.get(schoolAcademicsId);
+        
         return ResponseEntity.status(HttpStatus.OK).body(schooldId);
+
     }
 
 }

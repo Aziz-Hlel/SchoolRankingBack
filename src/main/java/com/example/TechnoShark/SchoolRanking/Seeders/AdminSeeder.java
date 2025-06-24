@@ -2,7 +2,6 @@ package com.example.TechnoShark.SchoolRanking.Seeders;
 
 import java.util.List;
 
-import org.mapstruct.control.MappingControl.Use;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 

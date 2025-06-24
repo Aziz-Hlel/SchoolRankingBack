@@ -33,8 +33,8 @@ public interface SchoolMapper {
     @Mapping(target = "schoolFacilities", ignore = true)
     @Mapping(target = "schoolMedia", ignore = true)
     @Mapping(target = "schoolStaff", ignore = true)
-    @Mapping(target = "formsCompleted", constant = "true")
-    @Mapping(target = "lastFormStep", ignore = true)
+    @Mapping(target = "formsCompleted", ignore = true)
+    @Mapping(target = "lastFormStep", constant = "1")
     School toEntity(SchoolRequest dto, User user);
 
     @Mapping(target = "id", ignore = true)

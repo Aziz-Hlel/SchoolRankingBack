@@ -31,4 +31,8 @@ public class UserContext {
         return getCurrentUser().getId();
     }
 
+    public static UUID getCurrentSchoolId() {
+        return getCurrentUser().getSchoolId();
+    }
+
 }
