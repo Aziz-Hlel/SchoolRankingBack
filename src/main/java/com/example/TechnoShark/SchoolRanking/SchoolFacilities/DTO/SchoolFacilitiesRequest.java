@@ -9,6 +9,7 @@ import com.example.TechnoShark.SchoolRanking.Enums.SustainabilityEnums;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -31,8 +32,10 @@ public class SchoolFacilitiesRequest {
     @NotBlank
     private String csrActivities;
 
+    @NotNull
     private Boolean safetyCompliance;
 
+    @NotNull
     private Boolean aiIntegration;
 
     private RatingLevelEnums technologyReadiness;

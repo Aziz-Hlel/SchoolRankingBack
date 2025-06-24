@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.TechnoShark.SchoolRanking.Config.AppProperties;
+import com.example.TechnoShark.SchoolRanking.Auth.Util.UserContext;
 import com.example.TechnoShark.SchoolRanking.SchoolFacilities.DTO.SchoolFacilitiesRequest;
 import com.example.TechnoShark.SchoolRanking.SchoolFacilities.DTO.SchoolFacilitiesResponse;
 import com.example.TechnoShark.SchoolRanking.SchoolFacilities.Service.SchoolFacilitiesService;
@@ -25,24 +25,24 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class SchoolFacilitiesController {
 
-    private final AppProperties appProperties;
     private final SchoolFacilitiesService schoolFacilitiesService;
 
     @PostMapping({ "", "/" })
     public ResponseEntity<UUID> post(@Valid @RequestBody SchoolFacilitiesRequest schoolFacilitiesRequest) {
 
-        UUID schoolId = UUID.fromString(appProperties.getSchoolId());
+        UUID schoolId = UserContext.getCurrentSchoolId();
 
         UUID schoolFacilitiesId = schoolFacilitiesService.createSchoolFacilities(schoolFacilitiesRequest, schoolId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(schoolFacilitiesId);
+
     }
 
     @PutMapping("/{schoolFacilitiesId}")
     public ResponseEntity<SchoolFacilitiesResponse> put(@PathVariable UUID schoolFacilitiesId,
             @Valid @RequestBody SchoolFacilitiesRequest schoolFacilitiesRequest) {
 
-        UUID schoolId = UUID.fromString(appProperties.getSchoolId());
+        UUID schoolId = UserContext.getCurrentSchoolId();
 
         SchoolFacilitiesResponse updatedEntity = schoolFacilitiesService.updateSchoolFacilities(schoolFacilitiesRequest,
                 schoolId);

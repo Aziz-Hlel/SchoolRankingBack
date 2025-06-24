@@ -10,6 +10,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.TechnoShark.SchoolRanking.Enums.AccessibilityEnums;
 import com.example.TechnoShark.SchoolRanking.Enums.AccreditationEnums;
@@ -23,7 +24,9 @@ import com.example.TechnoShark.SchoolRanking.Enums.RoleEnums;
 import com.example.TechnoShark.SchoolRanking.Enums.SchoolTypeEnums;
 import com.example.TechnoShark.SchoolRanking.Enums.SustainabilityEnums;
 import com.example.TechnoShark.SchoolRanking.SchoolAcademics.Model.SchoolAcademics;
+import com.example.TechnoShark.SchoolRanking.SchoolAcademics.Repo.SchoolAcademicsRepo;
 import com.example.TechnoShark.SchoolRanking.SchoolFacilities.Model.SchoolFacilities;
+import com.example.TechnoShark.SchoolRanking.SchoolFacilities.Repo.SchoolFacilitiesRepo;
 import com.example.TechnoShark.SchoolRanking.SchoolMedia.Model.SchoolMedia;
 import com.example.TechnoShark.SchoolRanking.SchoolStaff.Model.SchoolStaff;
 import com.example.TechnoShark.SchoolRanking.Schools.Model.School;
@@ -31,16 +34,18 @@ import com.example.TechnoShark.SchoolRanking.Schools.Repo.SchoolRepo;
 import com.example.TechnoShark.SchoolRanking.Users.Model.User;
 import com.example.TechnoShark.SchoolRanking.Users.Repo.UserRepo;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
+@Transactional
 @RequiredArgsConstructor
 @Slf4j
 public class SchoolSeeder {
     private final UserRepo userRepo;
     private final SchoolRepo schoolRepo;
+    private final SchoolAcademicsRepo schoolAcademicsRepo;
+    private final SchoolFacilitiesRepo schoolFacilitiesRepo;
     private final PasswordEncoder passwordEncoder;
 
     private final int numberOfSeeds = 10;
@@ -84,27 +89,74 @@ public class SchoolSeeder {
         return LocalDate.ofEpochDay(randomDay);
     }
 
-    private void createCustomUser() {
-
-        int currentForm = 1;
-        boolean isCompleted = false;
+    private School createGeneralSchool(int i, int currentForm, boolean isCompleted) {
 
         School schoolEntity = new School();
-        schoolEntity.setName("custom school");
+        schoolEntity.setName("school" + i);
         schoolEntity.setCountry(getRandomEnumValue(CountryEnums.class));
-        schoolEntity.setCity("custom city");
-        schoolEntity.setAddress("adress");
-        schoolEntity.setPhoneNumber("0000000");
-        schoolEntity.setEmail("custom_school" + "@example.com");
-        schoolEntity.setYearEstablished(2000);
+        schoolEntity.setCity("city" + i);
+        schoolEntity.setAddress("adress" + i);
+        schoolEntity.setPhoneNumber("0000000" + i);
+        schoolEntity.setEmail("school" + i + "@example.com");
+        schoolEntity.setYearEstablished(2000 + i);
         schoolEntity.setType(getRandomEnumValue(SchoolTypeEnums.class));
-        schoolEntity.setWebsite("https://school" + ".tn");
+        schoolEntity.setWebsite("https://school" + i + ".tn");
         schoolEntity.setLastFormStep(currentForm);
         schoolEntity.setFormsCompleted(isCompleted);
 
+        return schoolEntity;
+    }
+
+    private SchoolAcademics createAcademics(int i, School school) {
+        SchoolAcademics academics = new SchoolAcademics();
+        academics.setAccreditationDocsLinks("school" + i + ".com/accreditationDocsLinks");
+        academics.setLanguagesOfInstruction(getNumberofLanguagesOfInstruction());
+        academics.setCurriculums(getRandomEnumSet(CurriculumEnums.class));
+        academics.setInternationalAccreditations(getRandomEnumSet(AccreditationEnums.class));
+        academics.setLevelsOffered(getRandomEnumSet(LevelEnums.class));
+        
+        academics.setSchool(school); // Set the school reference
+        
+        return academics;
+
+    }
+
+    private SchoolFacilities creatSchoolFacilities(int i, School school) {
+        SchoolFacilities facilities = new SchoolFacilities();
+        facilities.setAccessibilityFeatures(getRandomEnumSet(AccessibilityEnums.class));
+        facilities.setFacilities(getRandomEnumSet(FacilityEnums.class));
+        facilities.setSustainabilityPractices(getRandomEnumSet(SustainabilityEnums.class));
+        facilities.setUniversityDestinations(Set.of("university destination 1", "university destination 2"));
+        facilities.setCsrActivities("school" + i + " csr activities");
+        facilities.setIndustryPartnerships(Set.of("industry partnership 1", "industry partnership 2"));
+        facilities.setSafetyCompliance(getRandomBoolean());
+        facilities.setAiIntegration(getRandomBoolean());
+        facilities.setTechnologyReadiness(getRandomEnumValue(RatingLevelEnums.class));
+        facilities.setAwardsAndRecognitions("school" + i + " awards and recognitions");
+
+        facilities.setSchool(school);
+
+        return facilities;
+
+    }
+
+    private void createCustomUser() {
+
+        int currentForm = 3;
+        boolean isCompleted = false;
+        int i = 0;
+
+        School schoolEntity = createGeneralSchool(i, currentForm, isCompleted);
+
+        SchoolAcademics academicsEntity = createAcademics(i, schoolEntity);
+        schoolAcademicsRepo.save(academicsEntity);
+
+        SchoolFacilities schoolFacilitiesEntity = creatSchoolFacilities(i, schoolEntity);
+        schoolFacilitiesRepo.save(schoolFacilitiesEntity);
+
         School school = schoolRepo.save(schoolEntity);
 
-        User manualUser = User.builder()
+        User useEntity = User.builder() 
                 .firstName("Admin")
                 .lastName("")
                 .email("admin@example.com")
@@ -113,10 +165,10 @@ public class SchoolSeeder {
                 .school(school) // Set school reference
                 .build();
 
-        User user = userRepo.save(manualUser);
+        userRepo.save(useEntity);
+
     }
 
-    @Transactional
     public void seed() {
 
         if (schoolRepo.count() != 0)
@@ -137,6 +189,8 @@ public class SchoolSeeder {
             school.setYearEstablished(2000 + i);
             school.setType(getRandomEnumValue(SchoolTypeEnums.class));
             school.setWebsite("https://school" + i + ".tn");
+
+            school.setFormsCompleted(true);
 
             // --- 3. Create Academics BEFORE saving school ---
             SchoolAcademics academics = new SchoolAcademics();

@@ -1,6 +1,5 @@
 package com.example.TechnoShark.SchoolRanking.SchoolFacilities.Model;
 
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -72,8 +71,10 @@ public class SchoolFacilities {
     @Column(name = "industry_partnership")
     private Set<String> industryPartnerships;
 
+    @Column(nullable = false)
     private Boolean safetyCompliance;
 
+    @Column(nullable = false)
     private Boolean aiIntegration;
 
     @Enumerated(EnumType.STRING)

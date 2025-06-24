@@ -12,6 +12,7 @@ import com.example.TechnoShark.SchoolRanking.SchoolFacilities.Model.SchoolFacili
 import com.example.TechnoShark.SchoolRanking.SchoolFacilities.Repo.SchoolFacilitiesRepo;
 import com.example.TechnoShark.SchoolRanking.Schools.Model.School;
 import com.example.TechnoShark.SchoolRanking.Schools.Repo.SchoolRepo;
+import com.example.TechnoShark.SchoolRanking.Schools.Service.FormProgressService;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -20,48 +21,52 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class SchoolFacilitiesService {
 
-    private final SchoolFacilitiesRepo schoolFacilitiesRepo;
-    private final SchoolFacilitiesMapper schoolFacilitiesMapper;
+        private final SchoolFacilitiesRepo schoolFacilitiesRepo;
+        private final SchoolFacilitiesMapper schoolFacilitiesMapper;
 
-    private final SchoolRepo schoolRepo;
+        private final SchoolRepo schoolRepo;
 
-    public UUID createSchoolFacilities(SchoolFacilitiesRequest schoolFacilitiesRequest, UUID schoolId) {
+        private final FormProgressService formProgressService;
 
-        School school = schoolRepo.findById(schoolId)
-                .orElseThrow(() -> new EntityNotFoundException("School not found"));
+        public UUID createSchoolFacilities(SchoolFacilitiesRequest schoolFacilitiesRequest, UUID schoolId) {
 
-        SchoolFacilities entity = schoolFacilitiesMapper.toEntity(schoolFacilitiesRequest, school);
+                School school = schoolRepo.findById(schoolId)
+                                .orElseThrow(() -> new EntityNotFoundException("School not found"));
 
-        SchoolFacilities savedEntity = schoolFacilitiesRepo.save(entity);
+                SchoolFacilities entity = schoolFacilitiesMapper.toEntity(schoolFacilitiesRequest, school);
 
-        return savedEntity.getId();
-    }
+                SchoolFacilities savedEntity = schoolFacilitiesRepo.save(entity);
 
-    public SchoolFacilitiesResponse updateSchoolFacilities(SchoolFacilitiesRequest schoolFacilitiesRequest,
-            UUID schoolId) {
+                formProgressService.updateFormProgress(schoolId, 3);
 
-        SchoolFacilities schoolFacilities = schoolFacilitiesRepo.findById(schoolId)
-                .orElseThrow(() -> new ResourceNotFoundException("School Facility not found"));
-        schoolFacilitiesMapper.updateEntity(schoolFacilitiesRequest, schoolId,
-                schoolFacilities);
+                return savedEntity.getId();
+        }
 
-        SchoolFacilities updatedEntity = schoolFacilitiesRepo.save(schoolFacilities);
+        public SchoolFacilitiesResponse updateSchoolFacilities(SchoolFacilitiesRequest schoolFacilitiesRequest,
+                        UUID schoolId) {
 
-        SchoolFacilitiesResponse dto = schoolFacilitiesMapper.toDTO(updatedEntity);
+                SchoolFacilities schoolFacilities = schoolFacilitiesRepo.findById(schoolId)
+                                .orElseThrow(() -> new ResourceNotFoundException("School Facility not found"));
+                schoolFacilitiesMapper.updateEntity(schoolFacilitiesRequest, schoolId,
+                                schoolFacilities);
 
-        return dto;
+                SchoolFacilities updatedEntity = schoolFacilitiesRepo.save(schoolFacilities);
 
-    }
+                SchoolFacilitiesResponse dto = schoolFacilitiesMapper.toDTO(updatedEntity);
 
-    public SchoolFacilitiesResponse getSchoolFacilities(UUID schoolId) {
+                return dto;
 
-        SchoolFacilities schoolFacilities = schoolFacilitiesRepo.findById(schoolId)
-                .orElseThrow(() -> new ResourceNotFoundException("School Facility not found"));
+        }
 
-        SchoolFacilitiesResponse dto = schoolFacilitiesMapper.toDTO(schoolFacilities);
+        public SchoolFacilitiesResponse getSchoolFacilities(UUID schoolId) {
 
-        return dto;
+                SchoolFacilities schoolFacilities = schoolFacilitiesRepo.findById(schoolId)
+                                .orElseThrow(() -> new ResourceNotFoundException("School Facility not found"));
 
-    }
+                SchoolFacilitiesResponse dto = schoolFacilitiesMapper.toDTO(schoolFacilities);
+
+                return dto;
+
+        }
 
 }

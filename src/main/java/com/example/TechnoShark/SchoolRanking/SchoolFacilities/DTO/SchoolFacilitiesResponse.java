@@ -16,8 +16,8 @@ public record SchoolFacilitiesResponse(
         List<String> universityDestinations,
         String csrActivities,
         List<String> industryPartnerships,
-        Boolean safetyCompliance,
-        Boolean aiIntegration,
+        boolean safetyCompliance,
+        boolean aiIntegration,
         RatingLevelEnums technologyReadiness,
         String awardsAndRecognitions) {
 }

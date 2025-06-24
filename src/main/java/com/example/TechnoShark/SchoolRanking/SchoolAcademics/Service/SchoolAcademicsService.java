@@ -27,27 +27,27 @@ public class SchoolAcademicsService {
     private final SchoolAcademicsMapper school_AcademicsMapper;
     private final FormProgressService formProgressService;
 
-    public UUID create(SchoolAcademicsRequest school_AcademicsRequest, UUID schooldId) {
+    public UUID create(SchoolAcademicsRequest school_AcademicsRequest, UUID schoolId) {
 
-        School school = schoolRepo.findById(schooldId)
+        School school = schoolRepo.findById(schoolId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "School not found"));
 
         SchoolAcademics newEntity = school_AcademicsMapper.toEntity(school_AcademicsRequest, school);
 
         SchoolAcademics savedEntity = school_AcademicsRepo.save(newEntity);
 
-        formProgressService.updateFormProgress(schooldId, 2);
+        formProgressService.updateFormProgress(schoolId, 3);
 
         return savedEntity.getId();
     }
 
-    public SchoolAcademicsResponse update(SchoolAcademicsRequest school_AcademicsRequest, UUID schooldId) {
-        Optional<SchoolAcademics> schoolAcedemics = school_AcademicsRepo.findById(schooldId);
+    public SchoolAcademicsResponse update(SchoolAcademicsRequest school_AcademicsRequest, UUID schoolId) {
+        Optional<SchoolAcademics> schoolAcedemics = school_AcademicsRepo.findById(schoolId);
 
         if (!schoolAcedemics.isPresent())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "School Acedemics not found");
 
-        SchoolAcademics updatedEntity = school_AcademicsMapper.updateEntity(school_AcademicsRequest, schooldId,
+        SchoolAcademics updatedEntity = school_AcademicsMapper.updateEntity(school_AcademicsRequest, schoolId,
                 schoolAcedemics.get());
 
         SchoolAcademics savedEntity = school_AcademicsRepo.save(updatedEntity);
