@@ -13,6 +13,7 @@ import com.example.TechnoShark.SchoolRanking.SchoolFacilities.Repo.SchoolFacilit
 import com.example.TechnoShark.SchoolRanking.Schools.Model.School;
 import com.example.TechnoShark.SchoolRanking.Schools.Repo.SchoolRepo;
 import com.example.TechnoShark.SchoolRanking.Schools.Service.FormProgressService;
+import com.example.TechnoShark.SchoolRanking.Utils.CurrentProgressForm;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -37,7 +38,7 @@ public class SchoolFacilitiesService {
 
                 SchoolFacilities savedEntity = schoolFacilitiesRepo.save(entity);
 
-                formProgressService.updateFormProgress(schoolId, 3);
+                formProgressService.updateFormProgress(schoolId, CurrentProgressForm.SCHOOL_STAFF);
 
                 return savedEntity.getId();
         }

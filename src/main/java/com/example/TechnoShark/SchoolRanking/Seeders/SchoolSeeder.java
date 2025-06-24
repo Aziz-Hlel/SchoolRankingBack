@@ -33,6 +33,7 @@ import com.example.TechnoShark.SchoolRanking.Schools.Model.School;
 import com.example.TechnoShark.SchoolRanking.Schools.Repo.SchoolRepo;
 import com.example.TechnoShark.SchoolRanking.Users.Model.User;
 import com.example.TechnoShark.SchoolRanking.Users.Repo.UserRepo;
+import com.example.TechnoShark.SchoolRanking.Utils.CurrentProgressForm;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -114,9 +115,9 @@ public class SchoolSeeder {
         academics.setCurriculums(getRandomEnumSet(CurriculumEnums.class));
         academics.setInternationalAccreditations(getRandomEnumSet(AccreditationEnums.class));
         academics.setLevelsOffered(getRandomEnumSet(LevelEnums.class));
-        
+
         academics.setSchool(school); // Set the school reference
-        
+
         return academics;
 
     }
@@ -142,7 +143,7 @@ public class SchoolSeeder {
 
     private void createCustomUser() {
 
-        int currentForm = 3;
+        int currentForm = CurrentProgressForm.SCHOOL_STAFF;
         boolean isCompleted = false;
         int i = 0;
 
@@ -156,7 +157,7 @@ public class SchoolSeeder {
 
         School school = schoolRepo.save(schoolEntity);
 
-        User useEntity = User.builder() 
+        User useEntity = User.builder()
                 .firstName("Admin")
                 .lastName("")
                 .email("admin@example.com")

@@ -14,6 +14,8 @@ import com.example.TechnoShark.SchoolRanking.SchoolStaff.Model.SchoolStaff;
 import com.example.TechnoShark.SchoolRanking.SchoolStaff.Repo.SchoolStaffRepo;
 import com.example.TechnoShark.SchoolRanking.Schools.Model.School;
 import com.example.TechnoShark.SchoolRanking.Schools.Repo.SchoolRepo;
+import com.example.TechnoShark.SchoolRanking.Schools.Service.FormProgressService;
+import com.example.TechnoShark.SchoolRanking.Utils.CurrentProgressForm;
 
 import lombok.AllArgsConstructor;
 
@@ -27,6 +29,8 @@ public class SchoolStaffService {
 
     private SchoolRepo schoolRepo;
 
+    private final FormProgressService formProgressService;
+
     public SchoolStaffResponse create(SchoolStaffRequestDTO dto, UUID schoolId) {
 
         Optional<School> school = schoolRepo.findById(schoolId);
@@ -37,6 +41,8 @@ public class SchoolStaffService {
         SchoolStaff entity = school_StaffMapper.toEntity(dto, school.get());
 
         SchoolStaff savedSchool_Staff = school_StaffRepo.save(entity);
+
+        formProgressService.updateFormProgress(schoolId, CurrentProgressForm.SCHOOL_MEDIA);
 
         return school_StaffMapper.toDTO(savedSchool_Staff);
     }

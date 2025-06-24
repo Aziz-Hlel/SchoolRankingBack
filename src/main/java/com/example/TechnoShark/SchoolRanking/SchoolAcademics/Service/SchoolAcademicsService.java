@@ -15,6 +15,7 @@ import com.example.TechnoShark.SchoolRanking.SchoolAcademics.Repo.SchoolAcademic
 import com.example.TechnoShark.SchoolRanking.Schools.Model.School;
 import com.example.TechnoShark.SchoolRanking.Schools.Repo.SchoolRepo;
 import com.example.TechnoShark.SchoolRanking.Schools.Service.FormProgressService;
+import com.example.TechnoShark.SchoolRanking.Utils.CurrentProgressForm;
 
 import lombok.AllArgsConstructor;
 
@@ -36,7 +37,7 @@ public class SchoolAcademicsService {
 
         SchoolAcademics savedEntity = school_AcademicsRepo.save(newEntity);
 
-        formProgressService.updateFormProgress(schoolId, 3);
+        formProgressService.updateFormProgress(schoolId, CurrentProgressForm.SCHOOL_FACILITIES);
 
         return savedEntity.getId();
     }
