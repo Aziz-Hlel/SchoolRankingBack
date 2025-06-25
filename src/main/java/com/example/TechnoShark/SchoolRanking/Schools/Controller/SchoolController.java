@@ -21,6 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.example.TechnoShark.SchoolRanking.Auth.DTO.JwtUserResponse;
 import com.example.TechnoShark.SchoolRanking.Auth.Util.UserContext;
+import com.example.TechnoShark.SchoolRanking.Enums.RoleEnums;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolDetailedResponse2;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolPageRequest;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolPageResponse;
@@ -61,9 +62,12 @@ public class SchoolController {
     public ResponseEntity<SchoolResponse> updateSchool(@PathVariable UUID schoolId,
             @Valid @RequestBody SchoolRequest schoolRequest) {
 
-        JwtUserResponse user = UserContext.getCurrentUser();
+        UUID userSchoolId = UserContext.getCurrentSchoolId();
 
-        SchoolResponse school = schoolService.update(schoolRequest, schoolId, user);
+        if (!userSchoolId.equals(schoolId) && UserContext.getRole() != RoleEnums.SUPER_ADMIN)
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not authorized to update this school");
+
+        SchoolResponse school = schoolService.update(schoolRequest, schoolId);
 
         return ResponseEntity.status(HttpStatus.OK).body(school);
     }

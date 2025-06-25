@@ -12,11 +12,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
-import com.example.TechnoShark.SchoolRanking.Config.AppProperties;
+import com.example.TechnoShark.SchoolRanking.Auth.Util.UserContext;
+import com.example.TechnoShark.SchoolRanking.Enums.RoleEnums;
 import com.example.TechnoShark.SchoolRanking.SchoolMedia.DTO.SchoolMediaResponse;
 import com.example.TechnoShark.SchoolRanking.SchoolMedia.DTO.SchoolMediaRequest;
 import com.example.TechnoShark.SchoolRanking.SchoolMedia.Service.SchoolMediaService;
+import com.example.TechnoShark.SchoolRanking.Utils.ApiResponse;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -26,22 +29,35 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class SchoolMediaContoller {
 
-    private final AppProperties appProperties;
     private final SchoolMediaService school_MediaService;
 
     @PostMapping({ "", "/" })
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<String> create(@RequestBody @Valid SchoolMediaRequest school_MediaRequest) {
-        String schoolId = appProperties.getSchoolId();
-        String schoolId2 = school_MediaService.create(school_MediaRequest, schoolId);
+    public ResponseEntity<ApiResponse<UUID>> create(@RequestBody @Valid SchoolMediaRequest school_MediaRequest) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(schoolId2);
+        UUID schoolId = UserContext.getCurrentSchoolId();
+
+        UUID schoolMediaId = school_MediaService.create(school_MediaRequest, schoolId);
+
+        ApiResponse<UUID> apiResponse = ApiResponse.<UUID>builder()
+                .message("School media created successfully")
+                .success(true)
+                .data(schoolMediaId)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
 
     @PutMapping("/{schoolMediaId}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<String> update(@PathVariable UUID schoolMediaId,
             @RequestBody @Valid SchoolMediaRequest school_MediaRequest) {
+
+        UUID userSchoolId = UserContext.getCurrentSchoolId();
+
+        if (!userSchoolId.equals(schoolMediaId) && UserContext.getRole() != RoleEnums.SUPER_ADMIN)
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not authorized to update this school");
+
         String schooldId = school_MediaService.update(school_MediaRequest, schoolMediaId);
         return ResponseEntity.status(HttpStatus.OK).body(schooldId);
     }

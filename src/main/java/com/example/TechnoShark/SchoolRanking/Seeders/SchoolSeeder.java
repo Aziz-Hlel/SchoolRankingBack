@@ -28,7 +28,9 @@ import com.example.TechnoShark.SchoolRanking.SchoolAcademics.Repo.SchoolAcademic
 import com.example.TechnoShark.SchoolRanking.SchoolFacilities.Model.SchoolFacilities;
 import com.example.TechnoShark.SchoolRanking.SchoolFacilities.Repo.SchoolFacilitiesRepo;
 import com.example.TechnoShark.SchoolRanking.SchoolMedia.Model.SchoolMedia;
+import com.example.TechnoShark.SchoolRanking.SchoolMedia.Repo.SchoolMediaRepo;
 import com.example.TechnoShark.SchoolRanking.SchoolStaff.Model.SchoolStaff;
+import com.example.TechnoShark.SchoolRanking.SchoolStaff.Repo.SchoolStaffRepo;
 import com.example.TechnoShark.SchoolRanking.Schools.Model.School;
 import com.example.TechnoShark.SchoolRanking.Schools.Repo.SchoolRepo;
 import com.example.TechnoShark.SchoolRanking.Users.Model.User;
@@ -47,6 +49,8 @@ public class SchoolSeeder {
     private final SchoolRepo schoolRepo;
     private final SchoolAcademicsRepo schoolAcademicsRepo;
     private final SchoolFacilitiesRepo schoolFacilitiesRepo;
+    private final SchoolStaffRepo schoolStaffRepo;
+    private final SchoolMediaRepo schoolMediaRepo;
     private final PasswordEncoder passwordEncoder;
 
     private final int numberOfSeeds = 10;
@@ -102,7 +106,7 @@ public class SchoolSeeder {
         schoolEntity.setYearEstablished(2000 + i);
         schoolEntity.setType(getRandomEnumValue(SchoolTypeEnums.class));
         schoolEntity.setWebsite("https://school" + i + ".tn");
-        schoolEntity.setLastFormStep(currentForm);
+        schoolEntity.setLastFormStep(currentForm); 
         schoolEntity.setFormsCompleted(isCompleted);
 
         return schoolEntity;
@@ -141,21 +145,58 @@ public class SchoolSeeder {
 
     }
 
+    private SchoolStaff createSchoolStaff(int i, School school) {
+
+        SchoolStaff staff = new SchoolStaff();
+        staff.setLeadershipProfileLink("https://school" + i + ".com/LeadershipProfileLink");
+        staff.setLeadershipTeam("school" + i + " leadership team");
+        staff.setProfessionalDevelopment("school" + i + " professional development");
+        staff.setStaffSizeEstimate(getRandomNumber(5, 50));
+        staff.setTeacherLanguages(getRandomEnumSet(LanguageEnums.class));
+        staff.setTeacherNationalities(getRandomEnumSet(CountryEnums.class));
+        staff.setTeacherQualifications("school" + i + " teacher qualifications");
+        staff.setLastInspectionDate(getRandomLocalDate(LocalDate.of(2000, 1, 1), LocalDate.of(2025, 1, 1)));
+
+        staff.setSchool(school);
+        school.setSchoolStaff(staff);
+
+        return staff;
+    }
+
+    private SchoolMedia creatSchoolMedia(int i, School school) {
+
+        SchoolMedia media = new SchoolMedia();
+        media.setBqaReportLink("https://school" + i + ".com/bqaReportLink");
+        media.setBrochureLink("https://school\" + i + \".com/BrochureLink");
+        media.setGalleryLink("https://school" + i + ".com/GalleryLink");
+        media.setVideoTourLink("https://school" + i + ".com/VideoTourLink");
+
+        media.setSchool(school);
+
+        return media;
+    }
+
     private void createCustomUser() {
 
-        int currentForm = CurrentProgressForm.SCHOOL_STAFF;
+        int currentForm = 1;// CurrentProgressForm.SCHOOL_MEDIA;
         boolean isCompleted = false;
         int i = 0;
 
         School schoolEntity = createGeneralSchool(i, currentForm, isCompleted);
 
-        SchoolAcademics academicsEntity = createAcademics(i, schoolEntity);
-        schoolAcademicsRepo.save(academicsEntity);
+        // SchoolAcademics academicsEntity = createAcademics(i, schoolEntity);
+        // schoolAcademicsRepo.save(academicsEntity);
 
-        SchoolFacilities schoolFacilitiesEntity = creatSchoolFacilities(i, schoolEntity);
-        schoolFacilitiesRepo.save(schoolFacilitiesEntity);
+        // SchoolFacilities schoolFacilitiesEntity = creatSchoolFacilities(i, schoolEntity);
+        // schoolFacilitiesRepo.save(schoolFacilitiesEntity);
 
         School school = schoolRepo.save(schoolEntity);
+
+        // SchoolStaff schoolStaffEntity = createSchoolStaff(i, school);
+        // schoolStaffRepo.save(schoolStaffEntity);
+
+        // SchoolMedia schoolMediaEntity = creatSchoolMedia(i, school);
+        // schoolMediaRepo.save(schoolMediaEntity);
 
         User useEntity = User.builder()
                 .firstName("Admin")

@@ -42,13 +42,13 @@ public class SchoolAcademicsService {
         return savedEntity.getId();
     }
 
-    public SchoolAcademicsResponse update(SchoolAcademicsRequest school_AcademicsRequest, UUID schoolId) {
-        Optional<SchoolAcademics> schoolAcedemics = school_AcademicsRepo.findById(schoolId);
+    public SchoolAcademicsResponse update(SchoolAcademicsRequest school_AcademicsRequest, UUID schoolAcademicsId) {
+        Optional<SchoolAcademics> schoolAcedemics = school_AcademicsRepo.findById(schoolAcademicsId);
 
         if (!schoolAcedemics.isPresent())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "School Acedemics not found");
 
-        SchoolAcademics updatedEntity = school_AcademicsMapper.updateEntity(school_AcademicsRequest, schoolId,
+        SchoolAcademics updatedEntity = school_AcademicsMapper.updateEntity(school_AcademicsRequest, schoolAcademicsId,
                 schoolAcedemics.get());
 
         SchoolAcademics savedEntity = school_AcademicsRepo.save(updatedEntity);

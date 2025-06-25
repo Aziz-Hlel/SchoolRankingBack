@@ -60,6 +60,7 @@ public class School {
                                      // is more of a database convention
 
     @Column(nullable = false)
+    // @Enumerated(EnumType.STRING)
     private SchoolTypeEnums type;
 
     @Column

@@ -38,6 +38,7 @@ public class SchoolFacilitiesRequest {
     @NotNull
     private Boolean aiIntegration;
 
+    // @NotNull
     private RatingLevelEnums technologyReadiness;
 
     @NotNull

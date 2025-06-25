@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.example.TechnoShark.SchoolRanking.Auth.DTO.JwtUserResponse;
-import com.example.TechnoShark.SchoolRanking.Enums.RoleEnums;
 import com.example.TechnoShark.SchoolRanking.ErrorHandler.Exceptions.ResourceNotFoundException;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolDetailedResponse2;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolPageResponse;
@@ -55,13 +53,10 @@ public class SchoolService {
     }
 
     @Transactional
-    public SchoolResponse update(SchoolRequest schoolRequest, UUID schoolId, JwtUserResponse userId) {
+    public SchoolResponse update(SchoolRequest schoolRequest, UUID schoolId) {
 
         School existingSchool = schoolRepo.findById(schoolId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "School not found"));
-
-        if (!existingSchool.getUser().getId().equals(userId.getId()) && userId.getRole() != RoleEnums.ADMIN)
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to update this school");
 
         School updatedEntity = schoolMapper.updateSchoolFromDto(schoolRequest, existingSchool);
 

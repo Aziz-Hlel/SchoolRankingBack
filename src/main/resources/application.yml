@@ -16,6 +16,9 @@ spring:
     password: password
     driver-class-name: org.postgresql.Driver
 
+  jackson:
+    default-property-inclusion: non_null  # Exclude all null fields globally
+    
   jpa: 
     hibernate:
       ddl-auto: create-drop 

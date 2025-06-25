@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.TechnoShark.SchoolRanking.Auth.DTO.JwtUserResponse;
 import com.example.TechnoShark.SchoolRanking.Auth.Util.UserContext;
 import com.example.TechnoShark.SchoolRanking.Config.AppProperties;
+import com.example.TechnoShark.SchoolRanking.Enums.RoleEnums;
 import com.example.TechnoShark.SchoolRanking.SchoolAcademics.DTO.SchoolAcademicsRequest;
 import com.example.TechnoShark.SchoolRanking.SchoolAcademics.DTO.SchoolAcademicsResponse;
 import com.example.TechnoShark.SchoolRanking.SchoolAcademics.Service.SchoolAcademicsService;
@@ -40,13 +42,16 @@ public class SchoolAcademicsController {
         return ResponseEntity.status(HttpStatus.CREATED).body(schoolAcademicsId);
     }
 
-    @PutMapping({ "", "/" })
-    public ResponseEntity<SchoolAcademicsResponse> update(
+    @PutMapping({ "/{schoolAcademicsId}" })
+    public ResponseEntity<SchoolAcademicsResponse> update(@PathVariable UUID schoolAcademicsId,
             @RequestBody @Valid SchoolAcademicsRequest school_AcademicsRequest) {
 
-        UUID schoolId = UserContext.getCurrentSchoolId();
+        UUID userSchoolId = UserContext.getCurrentSchoolId();
 
-        SchoolAcademicsResponse updatedEntity = school_AcademicsService.update(school_AcademicsRequest, schoolId);
+        if (!schoolAcademicsId.equals(userSchoolId) && UserContext.getRole() != RoleEnums.SUPER_ADMIN)
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not authorized to update this school");
+
+        SchoolAcademicsResponse updatedEntity = school_AcademicsService.update(school_AcademicsRequest, schoolAcademicsId);
 
         return ResponseEntity.status(HttpStatus.OK).body(updatedEntity);
     }
@@ -56,7 +61,7 @@ public class SchoolAcademicsController {
         // UUID schoolId = UserContext.getCurrentSchoolId();
 
         SchoolAcademicsResponse schooldId = school_AcademicsService.get(schoolAcademicsId);
-        
+
         return ResponseEntity.status(HttpStatus.OK).body(schooldId);
 
     }

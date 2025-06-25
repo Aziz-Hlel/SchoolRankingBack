@@ -14,6 +14,7 @@ import com.example.TechnoShark.SchoolRanking.SchoolMedia.Model.SchoolMedia;
 import com.example.TechnoShark.SchoolRanking.SchoolMedia.Repo.SchoolMediaRepo;
 import com.example.TechnoShark.SchoolRanking.Schools.Model.School;
 import com.example.TechnoShark.SchoolRanking.Schools.Repo.SchoolRepo;
+import com.example.TechnoShark.SchoolRanking.Schools.Service.FormProgressService;
 
 import lombok.AllArgsConstructor;
 
@@ -25,16 +26,20 @@ public class SchoolMediaService {
     private final SchoolMediaRepo school_MediaRepo;
     private final SchoolMediaMapper school_MediaMapper;
 
-    public String create(SchoolMediaRequest school_MediaRequest, String schoolId) {
+    private final FormProgressService formProgressService;
 
-        Optional<School> school = schoolRepo.findById(UUID.fromString(schoolId));
+    public UUID create(SchoolMediaRequest school_MediaRequest, UUID schoolId) {
 
-        if (!school.isPresent())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "School not found");
+        School school = schoolRepo.findById(schoolId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "School not found"));
 
-        SchoolMedia entity = school_MediaMapper.toEntity(school_MediaRequest, school.get());
+        SchoolMedia entity = school_MediaMapper.toEntity(school_MediaRequest, school);
+
         SchoolMedia schoolMedia = school_MediaRepo.save(entity);
-        return schoolMedia.getId().toString();
+
+        formProgressService.markFormsCompleted(school.getId());
+
+        return schoolMedia.getId();
 
     }
 
@@ -51,9 +56,8 @@ public class SchoolMediaService {
     }
 
     public SchoolMediaResponse get(UUID schoolMediaId) {
-        Optional<SchoolMedia> schoolMedia = school_MediaRepo.findById(schoolMediaId);
-        if (!schoolMedia.isPresent())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "School Media not found");
-        return school_MediaMapper.toDto(schoolMedia.get());
+        SchoolMedia schoolMedia = school_MediaRepo.findById(schoolMediaId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "School Media not found"));
+        return school_MediaMapper.toDto(schoolMedia);
     }
 }

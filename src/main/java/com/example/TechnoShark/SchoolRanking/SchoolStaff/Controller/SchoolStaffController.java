@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.TechnoShark.SchoolRanking.Auth.Util.UserContext;
 import com.example.TechnoShark.SchoolRanking.Config.AppProperties;
+import com.example.TechnoShark.SchoolRanking.Enums.RoleEnums;
 import com.example.TechnoShark.SchoolRanking.SchoolStaff.DTO.SchoolStaffRequestDTO;
 import com.example.TechnoShark.SchoolRanking.SchoolStaff.DTO.SchoolStaffResponse;
 import com.example.TechnoShark.SchoolRanking.SchoolStaff.Service.SchoolStaffService;
@@ -42,13 +44,20 @@ public class SchoolStaffController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PutMapping({ "", "/" })
+    @PutMapping("/{schoolFacilitiesId}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<SchoolStaffResponse> update(
+    public ResponseEntity<SchoolStaffResponse> update(@PathVariable UUID schoolFacilitiesId,
             @RequestBody @Valid SchoolStaffRequestDTO school_StaffRequestDTO) {
-        UUID schoolId = UUID.fromString(appProperties.getSchoolId());
-        SchoolStaffResponse response = school_StaffService.update(school_StaffRequestDTO, schoolId);
+
+        UUID userSchoolId = UserContext.getCurrentSchoolId();
+
+        if (!userSchoolId.equals(schoolFacilitiesId) && UserContext.getRole() != RoleEnums.SUPER_ADMIN)
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not authorized to update this school");
+
+        SchoolStaffResponse response = school_StaffService.update(school_StaffRequestDTO, schoolFacilitiesId);
+
         return ResponseEntity.status(HttpStatus.OK).body(response);
+
     }
 
     @GetMapping("/{school_StaffId}")

@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.TechnoShark.SchoolRanking.Auth.Util.UserContext;
+import com.example.TechnoShark.SchoolRanking.Enums.RoleEnums;
 import com.example.TechnoShark.SchoolRanking.SchoolFacilities.DTO.SchoolFacilitiesRequest;
 import com.example.TechnoShark.SchoolRanking.SchoolFacilities.DTO.SchoolFacilitiesResponse;
 import com.example.TechnoShark.SchoolRanking.SchoolFacilities.Service.SchoolFacilitiesService;
@@ -42,10 +44,13 @@ public class SchoolFacilitiesController {
     public ResponseEntity<SchoolFacilitiesResponse> put(@PathVariable UUID schoolFacilitiesId,
             @Valid @RequestBody SchoolFacilitiesRequest schoolFacilitiesRequest) {
 
-        UUID schoolId = UserContext.getCurrentSchoolId();
+        UUID userSchoolId = UserContext.getCurrentSchoolId();
+
+        if (!userSchoolId.equals(schoolFacilitiesId) && UserContext.getRole() != RoleEnums.SUPER_ADMIN)
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not authorized to update this school");
 
         SchoolFacilitiesResponse updatedEntity = schoolFacilitiesService.updateSchoolFacilities(schoolFacilitiesRequest,
-                schoolId);
+                schoolFacilitiesId);
 
         return ResponseEntity.status(HttpStatus.OK).body(updatedEntity);
     }

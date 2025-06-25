@@ -56,7 +56,7 @@ public interface SchoolMapper {
     }
 
     @Mapping(target = "adminUsername", expression = "java(mapAdminUsername(school))")
-    @Mapping(target = "isComplete", constant = "true")
+    @Mapping(target = "isComplete", source = "formsCompleted")
     SchoolPageResponse toPageDto(School school);
 
     SchoolDetailedResponse toDetailedDto(School school);

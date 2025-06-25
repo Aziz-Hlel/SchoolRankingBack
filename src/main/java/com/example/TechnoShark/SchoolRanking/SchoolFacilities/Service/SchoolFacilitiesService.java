@@ -24,9 +24,7 @@ public class SchoolFacilitiesService {
 
         private final SchoolFacilitiesRepo schoolFacilitiesRepo;
         private final SchoolFacilitiesMapper schoolFacilitiesMapper;
-
         private final SchoolRepo schoolRepo;
-
         private final FormProgressService formProgressService;
 
         public UUID createSchoolFacilities(SchoolFacilitiesRequest schoolFacilitiesRequest, UUID schoolId) {

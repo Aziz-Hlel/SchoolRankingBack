@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.example.TechnoShark.SchoolRanking.Auth.DTO.JwtUserResponse;
 import com.example.TechnoShark.SchoolRanking.Auth.Model.CustomUserDetails;
+import com.example.TechnoShark.SchoolRanking.Enums.RoleEnums;
 import com.example.TechnoShark.SchoolRanking.Users.Model.User;
 
 public class UserContext {
@@ -33,6 +34,10 @@ public class UserContext {
 
     public static UUID getCurrentSchoolId() {
         return getCurrentUser().getSchoolId();
+    }
+
+    public static RoleEnums getRole() {
+        return getCurrentUser().getRole();
     }
 
 }
