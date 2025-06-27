@@ -1,0 +1,43 @@
+# ? Alternative Spring Boot Dev Dockerfile (More Professional) (frol Claude)
+
+# Multi-stage build - even for dev, this is becoming standard
+FROM eclipse-temurin:21-jdk-alpine AS development
+
+# Create non-root user for security (enterprise requirement)
+RUN addgroup -g 1001 -S spring && \
+    adduser -S spring -u 1001
+
+# Set working directory
+WORKDIR /app
+
+# Install Maven
+RUN apk add --no-cache maven
+
+# Change ownership to spring user
+RUN chown -R spring:spring /app
+USER spring
+
+# Copy Maven configuration
+COPY --chown=spring:spring pom.xml ./
+
+# Download dependencies first (better caching)
+RUN mvn dependency:go-offline -B
+
+# Copy source code
+COPY --chown=spring:spring src ./src
+
+# Expose port
+EXPOSE 8080
+
+# Set JVM options for development
+ENV JAVA_OPTS="-Xmx512m -Xms256m -Dspring.profiles.active=dev"
+
+# Enable Spring Boot DevTools and remote debugging
+ENV SPRING_DEVTOOLS_REMOTE_SECRET=mysecret
+ENV JAVA_TOOL_OPTIONS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:5005"
+
+# Expose debug port
+EXPOSE 5005
+
+# Use spring-boot:run for hot reload in development
+CMD ["mvn", "spring-boot:run"]

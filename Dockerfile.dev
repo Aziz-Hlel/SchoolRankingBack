@@ -1,0 +1,28 @@
+# Use Eclipse Temurin - it's the industry standard for production Spring apps
+# OpenJDK 21 is the current LTS version most enterprises are adopting
+FROM eclipse-temurin:21-jdk-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Install Maven (if you're using Maven) or skip if using Gradle
+# Most enterprise Spring projects use Maven
+RUN apk add --no-cache maven
+
+# Copy Maven files first for better layer caching
+# Critical for build performance - only re-downloads dependencies when pom.xml changes
+COPY pom.xml ./
+COPY src ./src
+
+# Alternative approach: Copy everything and let Maven handle it
+# COPY . .
+
+# Expose Spring Boot default port
+EXPOSE 8080
+
+# For development, we want hot reload, so we'll use spring-boot:run
+# This runs the app with the Maven Spring Boot plugin which supports dev tools
+CMD ["mvn", "spring-boot:run", "-Dspring-boot.run.profiles=dev"]
+
+# Alternative for Gradle users:
+# CMD ["./gradlew", "bootRun", "--args='--spring.profiles.active=dev'"]
