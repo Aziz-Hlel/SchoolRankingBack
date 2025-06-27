@@ -1,6 +1,6 @@
 # Use Eclipse Temurin - it's the industry standard for production Spring apps
 # OpenJDK 21 is the current LTS version most enterprises are adopting
-FROM eclipse-temurin:21-jdk-alpine
+FROM eclipse-temurin:17-jdk-alpine
 
 # Set working directory
 WORKDIR /app
@@ -13,6 +13,8 @@ RUN apk add --no-cache maven
 # Critical for build performance - only re-downloads dependencies when pom.xml changes
 COPY pom.xml ./
 COPY src ./src
+
+# RUN mvn clean install
 
 # Alternative approach: Copy everything and let Maven handle it
 # COPY . .
