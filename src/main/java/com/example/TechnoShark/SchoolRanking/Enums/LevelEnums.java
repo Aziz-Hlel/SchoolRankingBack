@@ -2,10 +2,15 @@ package com.example.TechnoShark.SchoolRanking.Enums;
 
 public enum LevelEnums {
     KG,
-    PRIMARY,
-    MIDDLE_SCHOOL,
-    SECONDARY,
-    HIGH_SCHOOL,
-    A_LEVEL,
-    IB
+    PRI,
+    MS,
+    SEC,
+    HS,
+    AL,
+    IB,
+    PS,
+    EL,
+    MID,
+    HIG,
+    UNI,
 }

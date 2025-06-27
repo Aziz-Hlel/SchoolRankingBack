@@ -5,6 +5,11 @@ public enum AccreditationEnums {
     BSO,
     CIS,
     Cognia,
-    AEFE
+    AEFE,
+    NEASC,
+    WASC,
+    MSA,
+    SACS,
+    ACSI
 
 }

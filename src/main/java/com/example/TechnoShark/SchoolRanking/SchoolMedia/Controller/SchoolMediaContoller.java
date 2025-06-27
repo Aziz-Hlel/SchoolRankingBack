@@ -55,7 +55,7 @@ public class SchoolMediaContoller {
 
         UUID userSchoolId = UserContext.getCurrentSchoolId();
 
-        if (!userSchoolId.equals(schoolMediaId) && UserContext.getRole() != RoleEnums.SUPER_ADMIN)
+        if (!schoolMediaId.equals(userSchoolId) && UserContext.getRole() != RoleEnums.SUPER_ADMIN)
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not authorized to update this school");
 
         String schooldId = school_MediaService.update(school_MediaRequest, schoolMediaId);

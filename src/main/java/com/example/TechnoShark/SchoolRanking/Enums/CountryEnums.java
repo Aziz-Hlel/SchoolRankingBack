@@ -1,18 +1,25 @@
 package com.example.TechnoShark.SchoolRanking.Enums;
 
 public enum CountryEnums {
-    USA("United States"),
-    France("France"),
-    Morocco("Maroc");
-
-    private final String displayName;
-
-    CountryEnums(String displayName) {
-        this.displayName = displayName;
-    }
-
-    public String getDisplayName() {
-        return displayName;  
-    }
-
+    US,
+    CA,
+    GB,
+    FR,
+    DE,
+    IT,
+    ES,
+    AU,
+    JP,
+    CN,
+    IN,
+    BR,
+    MX,
+    RU,
+    ZA,
+    TR,
+    KR,
+    SA,
+    EG,
+    MA,
+    AE
 }

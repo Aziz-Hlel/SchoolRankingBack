@@ -51,7 +51,7 @@ public class SchoolStaffController {
 
         UUID userSchoolId = UserContext.getCurrentSchoolId();
 
-        if (!userSchoolId.equals(schoolFacilitiesId) && UserContext.getRole() != RoleEnums.SUPER_ADMIN)
+        if (!schoolFacilitiesId.equals(userSchoolId) && UserContext.getRole() != RoleEnums.SUPER_ADMIN)
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not authorized to update this school");
 
         SchoolStaffResponse response = school_StaffService.update(school_StaffRequestDTO, schoolFacilitiesId);

@@ -1,13 +1,13 @@
 package com.example.TechnoShark.SchoolRanking.Enums;
 
 public enum CurriculumEnums {
-    BRITISH,
-    AMERICAN,
+    UK,
+    US,
     IB,
     CBSE,
     IGCSE,
-    A_LEVEL,
-    FRENCH,
-    GERMAN
+    AL,
+    FR,
+    DE
 
 }

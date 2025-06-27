@@ -57,17 +57,17 @@ public class SchoolController {
         return ResponseEntity.status(HttpStatus.CREATED).body(schooldId);
     }
 
-    @PutMapping({ "/{schoolId}" })
+    @PutMapping({ "/{schoolGeneralId}" })
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<SchoolResponse> updateSchool(@PathVariable UUID schoolId,
+    public ResponseEntity<SchoolResponse> updateSchool(@PathVariable UUID schoolGeneralId,
             @Valid @RequestBody SchoolRequest schoolRequest) {
 
         UUID userSchoolId = UserContext.getCurrentSchoolId();
 
-        if (!userSchoolId.equals(schoolId) && UserContext.getRole() != RoleEnums.SUPER_ADMIN)
+        if (!schoolGeneralId.equals(userSchoolId) && UserContext.getRole() != RoleEnums.SUPER_ADMIN)
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not authorized to update this school");
 
-        SchoolResponse school = schoolService.update(schoolRequest, schoolId);
+        SchoolResponse school = schoolService.update(schoolRequest, schoolGeneralId);
 
         return ResponseEntity.status(HttpStatus.OK).body(school);
     }

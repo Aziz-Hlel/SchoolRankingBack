@@ -2,7 +2,9 @@ package com.example.TechnoShark.SchoolRanking.Enums;
 
 public enum SustainabilityEnums {
     SOLAR,
-    RECYCLYING,
-    GREEN_SPACES,
-    
+    RECYCLING,
+    WATER_CONSERVATION,
+    ENERGY_EFFICIENT_LIGHTING,
+    GREEN_SPACES
+
 }

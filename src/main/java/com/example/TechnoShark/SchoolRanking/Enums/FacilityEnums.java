@@ -1,13 +1,15 @@
 package com.example.TechnoShark.SchoolRanking.Enums;
 
 public enum FacilityEnums {
-
-  LIBRARY,
-  COMPUTER_LAB,
-  SPORTS_COURT,
-  PLAYGROUND,
+  LIB,
+  LAB,
   GYM,
-  KITCHEN,
-  CAFETERIA,
-  RESTAURANT,
+  CAF,
+  AUD,
+  PGD,
+  SWP,
+  ART,
+  MUS,
+  CLAB,
+  SFLD
 }

@@ -46,7 +46,7 @@ public class SchoolFacilitiesController {
 
         UUID userSchoolId = UserContext.getCurrentSchoolId();
 
-        if (!userSchoolId.equals(schoolFacilitiesId) && UserContext.getRole() != RoleEnums.SUPER_ADMIN)
+        if (!schoolFacilitiesId.equals(userSchoolId) && UserContext.getRole() != RoleEnums.SUPER_ADMIN)
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not authorized to update this school");
 
         SchoolFacilitiesResponse updatedEntity = schoolFacilitiesService.updateSchoolFacilities(schoolFacilitiesRequest,

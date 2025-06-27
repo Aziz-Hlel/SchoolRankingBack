@@ -106,7 +106,7 @@ public class SchoolSeeder {
         schoolEntity.setYearEstablished(2000 + i);
         schoolEntity.setType(getRandomEnumValue(SchoolTypeEnums.class));
         schoolEntity.setWebsite("https://school" + i + ".tn");
-        schoolEntity.setLastFormStep(currentForm); 
+        schoolEntity.setLastFormStep(currentForm);
         schoolEntity.setFormsCompleted(isCompleted);
 
         return schoolEntity;
@@ -178,17 +178,17 @@ public class SchoolSeeder {
 
     private void createCustomUser() {
 
-        int currentForm = 1;// CurrentProgressForm.SCHOOL_MEDIA;
+        int currentForm = CurrentProgressForm.SCHOOL_STAFF;// CurrentProgressForm.SCHOOL_MEDIA;
         boolean isCompleted = false;
         int i = 0;
 
         School schoolEntity = createGeneralSchool(i, currentForm, isCompleted);
 
-        // SchoolAcademics academicsEntity = createAcademics(i, schoolEntity);
-        // schoolAcademicsRepo.save(academicsEntity);
+        SchoolAcademics academicsEntity = createAcademics(i, schoolEntity);
+        schoolAcademicsRepo.save(academicsEntity);
 
-        // SchoolFacilities schoolFacilitiesEntity = creatSchoolFacilities(i, schoolEntity);
-        // schoolFacilitiesRepo.save(schoolFacilitiesEntity);
+        SchoolFacilities schoolFacilitiesEntity = creatSchoolFacilities(i, schoolEntity);
+        schoolFacilitiesRepo.save(schoolFacilitiesEntity);
 
         School school = schoolRepo.save(schoolEntity);
 
