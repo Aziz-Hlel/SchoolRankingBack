@@ -1,7 +1,7 @@
 # ? Alternative Spring Boot Dev Dockerfile (More Professional) (frol Claude)
 
 # Multi-stage build - even for dev, this is becoming standard
-FROM eclipse-temurin:21-jdk-alpine AS development
+FROM eclipse-temurin:17-jdk-alpine AS development
 
 # Create non-root user for security (enterprise requirement)
 RUN addgroup -g 1001 -S spring && \
