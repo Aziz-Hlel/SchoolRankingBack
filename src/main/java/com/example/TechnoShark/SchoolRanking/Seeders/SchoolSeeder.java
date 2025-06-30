@@ -178,19 +178,21 @@ public class SchoolSeeder {
 
     private void createCustomUser() {
 
-        int currentForm = CurrentProgressForm.SCHOOL_STAFF;// CurrentProgressForm.SCHOOL_MEDIA;
+        int currentForm = CurrentProgressForm.SCHOOL_GENERAL;// CurrentProgressForm.SCHOOL_MEDIA;
         boolean isCompleted = false;
         int i = 0;
 
-        School schoolEntity = createGeneralSchool(i, currentForm, isCompleted);
+        School school = null;
 
-        SchoolAcademics academicsEntity = createAcademics(i, schoolEntity);
-        schoolAcademicsRepo.save(academicsEntity);
+        // School schoolEntity = createGeneralSchool(i, currentForm, isCompleted);
 
-        SchoolFacilities schoolFacilitiesEntity = creatSchoolFacilities(i, schoolEntity);
-        schoolFacilitiesRepo.save(schoolFacilitiesEntity);
+        // SchoolAcademics academicsEntity = createAcademics(i, schoolEntity);
+        // schoolAcademicsRepo.save(academicsEntity);
 
-        School school = schoolRepo.save(schoolEntity);
+        // SchoolFacilities schoolFacilitiesEntity = creatSchoolFacilities(i,schoolEntity);
+        // schoolFacilitiesRepo.save(schoolFacilitiesEntity);
+
+        // school = schoolRepo.save(schoolEntity);
 
         // SchoolStaff schoolStaffEntity = createSchoolStaff(i, school);
         // schoolStaffRepo.save(schoolStaffEntity);

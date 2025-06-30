@@ -28,9 +28,16 @@ import lombok.extern.slf4j.Slf4j;
 public class GlobalExceptionHandler {
 
         @ExceptionHandler(BadCredentialsException.class)
-        public ResponseEntity<?> handleBadCredentials(BadCredentialsException ex) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                                .body(Map.of("error", "Unauthorized", "message", ex.getMessage()));
+        public ResponseEntity<ErrorResponse> handleBadCredentials(BadCredentialsException ex) {
+
+                ErrorResponse errorResponse = ErrorResponse.builder()
+                                .message(ex.getMessage())
+                                .status(HttpStatus.UNAUTHORIZED.value())
+                                .timestamp(LocalDateTime.now())
+                                .errors(Map.of("error", "Unauthorized", "message", ex.getMessage()))
+                                .build();
+
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
         }
 
         // this one catches exceptions throw by spring security at the controller level

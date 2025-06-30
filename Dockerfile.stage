@@ -1,0 +1,35 @@
+# Stage 1: Build the app using Maven
+FROM maven:3.9.6-eclipse-temurin-17-alpine AS build
+
+# Set working directory
+WORKDIR /build
+
+# Copy Maven configuration and download dependencies (cached if unchanged)
+COPY pom.xml .
+RUN mvn dependency:go-offline
+
+# Copy full source and build
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+# Stage 2: Runtime image (slim and secure)
+FROM eclipse-temurin:17-jdk-alpine
+
+# Create non-root user (same as in dev)
+RUN addgroup -g 1001 -S spring && \
+    adduser -S spring -u 1001
+
+USER spring
+WORKDIR /app
+
+# Copy the built JAR from previous stage
+COPY --from=build /build/target/*.jar app.jar
+
+# Set JVM and Spring Boot profile for staging
+ENV JAVA_OPTS="-Xmx512m -Xms256m -Dspring.profiles.active=stage"
+
+# Expose app port
+EXPOSE 8080
+
+# Run the Spring Boot app
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]

@@ -3,17 +3,17 @@
 spring:
 
   profiles:
-    active: ${SPRING_PROFILES_ACTIVE}
+    active: ${PROFILES_ACTIVE}
 
   application:
     name: SchoolRanking
 
 
-
+ 
   datasource:
-    url: jdbc:postgresql://db:5432/schoolranking_dev
-    username: postgres
-    password: postgres
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jackson:
@@ -21,7 +21,7 @@ spring:
     
   jpa: 
     hibernate:
-      ddl-auto: create-drop 
+      ddl-auto: update 
       # format_sql: true
      
     # show-sql: true
@@ -30,6 +30,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect        #This tells Hibernate (the ORM used by Spring Data JPA) how to generate SQL statements that are optimized for PostgreSQL.
 
 server:
+  port: ${SERVER_PORT}
   servlet:
     context-path: /api # This automatically prefixes every controller path with /api
 
