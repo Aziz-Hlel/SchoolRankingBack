@@ -1,0 +1,8 @@
+app: # like .env retreived in AppProperties 
+  userId: 4e666efa-89e2-41bc-be83-21dc68478f96
+  schoolId: 44d5d438-7afd-4595-be8e-294a08532138
+  
+  jwt:
+    secret: dGhpc2lzYXZlcnlsb25nc2VjcmV0a2V5Zm9yand0dG9rZW5nZW5lcmF0aW9uYW5kdmFsaWRhdGlvbg==
+    access-token-expiration: 900000      # 15 minutes
+    refresh-token-expiration: 604800000  # 7 days
