@@ -37,7 +37,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         // Best practice: be explicit and strict
-        config.setAllowedOrigins(List.of("http://localhost:5173","http://localhost:5174","https://localhost:8443")); // Or your frontend URL
+        config.setAllowedOrigins(List.of("http://localhost:5173","http://localhost:5174","https://localhost:8443","https://sema-sim.com")); // Or your frontend URL
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         config.setAllowCredentials(true); // if using cookies or credentials
