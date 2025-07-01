@@ -46,7 +46,7 @@ public class UserController {
     // @PreAuthorize("hasRole('ADMIN') or @postService.isOwner(#id,
     // authentication.name)") // Complex authorization
 
-    // @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @PostMapping({ "", "/" })
     ResponseEntity<ApiResponse<UserResponse>> createUser(@Valid @RequestBody CreateUserRequest userRequest) {
         // if ("admin".equals(userRequest.getSchool()))

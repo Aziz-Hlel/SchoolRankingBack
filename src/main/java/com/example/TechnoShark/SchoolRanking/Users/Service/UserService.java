@@ -47,7 +47,7 @@ public class UserService {
                 .firstName(userRequest.getFirstName())
                 .lastName(userRequest.getLastName())
                 .school(null)
-                .role(RoleEnums.SUPER_ADMIN)
+                .role(RoleEnums.ADMIN)
                 .email(userRequest.getEmail())
                 .password(passwordEncoder.encode(userRequest.getPassword()))
                 .build();
