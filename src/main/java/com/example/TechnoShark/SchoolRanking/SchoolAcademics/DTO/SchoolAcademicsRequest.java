@@ -19,7 +19,7 @@ public class SchoolAcademicsRequest {
     @NotNull
     private Set<AccreditationEnums> internationalAccreditations;
 
-    @NotBlank
+    
     private String accreditationDocsLinks;
 
     @NotNull

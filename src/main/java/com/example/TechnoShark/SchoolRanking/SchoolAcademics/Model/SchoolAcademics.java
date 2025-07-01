@@ -49,6 +49,7 @@ public class SchoolAcademics {
     @Column(name = "accreditation")
     private Set<AccreditationEnums> internationalAccreditations;
 
+    @Column(nullable = true)
     private String accreditationDocsLinks;
 
     // this is chat recommendation for the best approach for the case of multiple
