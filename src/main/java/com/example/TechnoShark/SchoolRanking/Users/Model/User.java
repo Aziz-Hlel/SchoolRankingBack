@@ -1,17 +1,21 @@
 package com.example.TechnoShark.SchoolRanking.Users.Model;
 
-import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.TechnoShark.SchoolRanking.Enums.RoleEnums;
-import com.example.TechnoShark.SchoolRanking.Schools.Model.School;
+import com.example.TechnoShark.SchoolRanking.UserSchool.Model.UserSchool;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -21,8 +25,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -57,15 +60,24 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private RoleEnums role;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = true, cascade = CascadeType.ALL) // added cascade = CascadeType.ALL for
-                                                                                  // the seeder
-    @JoinColumn(name = "school_id", unique = true)
-    private School school;
-    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore // Prevent serialization issues
+    @Builder.Default
+    private List<UserSchool> userSchools = new ArrayList<>();
+
+    // public List<School> getSchools() {
+    //     return userSchools.stream()
+    //             .map(UserSchool::getSchool)
+    //             .collect(Collectors.toList());
+    // }
+
+    // Add audit fields - industry standard
     @CreationTimestamp
+    @Column(nullable = false, updatable = false)
     private Date createdAt;
 
-    @CreationTimestamp
+    @UpdateTimestamp
+    @Column(nullable = false)
     private Date updatedAt;
 
     @Override

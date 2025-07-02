@@ -6,7 +6,6 @@ import com.example.TechnoShark.SchoolRanking.Enums.AccreditationEnums;
 import com.example.TechnoShark.SchoolRanking.Enums.CurriculumEnums;
 import com.example.TechnoShark.SchoolRanking.Enums.LevelEnums;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 

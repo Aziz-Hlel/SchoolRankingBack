@@ -13,7 +13,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.example.TechnoShark.SchoolRanking.Enums.RoleEnums;
 import com.example.TechnoShark.SchoolRanking.ErrorHandler.Exceptions.ResourceNotFoundException;
-import com.example.TechnoShark.SchoolRanking.Schools.Model.School;
 import com.example.TechnoShark.SchoolRanking.Users.DTO.CreateUserRequest;
 import com.example.TechnoShark.SchoolRanking.Users.DTO.UpdateUserRequest;
 import com.example.TechnoShark.SchoolRanking.Users.DTO.UserPageResponse;
@@ -46,7 +45,6 @@ public class UserService {
         User newUser = User.builder()
                 .firstName(userRequest.getFirstName())
                 .lastName(userRequest.getLastName())
-                .school(null)
                 .role(RoleEnums.ADMIN)
                 .email(userRequest.getEmail())
                 .password(passwordEncoder.encode(userRequest.getPassword()))
@@ -58,7 +56,6 @@ public class UserService {
                 newUser.getId(),
                 newUser.getFirstName(),
                 newUser.getLastName(),
-                null,
                 newUser.getRole(),
                 newUser.getEmail());
 
@@ -86,13 +83,12 @@ public class UserService {
         User user = userRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
 
-        School school = user.getSchool();
 
         return new UserResponse(
                 user.getId(),
                 user.getFirstName(),
                 user.getLastName(),
-                school != null ? school.getId() : null,
+                // user.getSchools(),
                 user.getRole(), user.getEmail());
 
     }

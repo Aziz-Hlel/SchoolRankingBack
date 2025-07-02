@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.example.TechnoShark.SchoolRanking.Auth.DTO.JwtUserResponse;
 import com.example.TechnoShark.SchoolRanking.Auth.Util.UserContext;
 import com.example.TechnoShark.SchoolRanking.Enums.RoleEnums;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolDetailedResponse2;
@@ -29,6 +28,7 @@ import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolProgressResponse;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolRequest;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolResponse;
 import com.example.TechnoShark.SchoolRanking.Schools.Service.SchoolService;
+import com.example.TechnoShark.SchoolRanking.UserSchool.Service.SchoolAuthorizationService;
 import com.example.TechnoShark.SchoolRanking.Utils.ApiResponse;
 
 import jakarta.validation.Valid;
@@ -41,17 +41,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SchoolController {
 
-    private SchoolService schoolService;
+    private final SchoolService schoolService;
+    private final SchoolAuthorizationService schoolAuthService;
 
     @PostMapping({ "", "/" })
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<String> createSchool(@Valid @RequestBody SchoolRequest schoolRequest) {
 
         UUID userId = UserContext.getCurrentUserId();
-        JwtUserResponse user = UserContext.getCurrentUser();
-        if (user.getSchoolId() != null) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already has a school");
-        }
+
         String schooldId = schoolService.create(schoolRequest, userId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(schooldId);
@@ -62,9 +60,10 @@ public class SchoolController {
     public ResponseEntity<SchoolResponse> updateSchool(@PathVariable UUID schoolGeneralId,
             @Valid @RequestBody SchoolRequest schoolRequest) {
 
-        UUID userSchoolId = UserContext.getCurrentSchoolId();
+        UUID userId = UserContext.getCurrentUserId();
 
-        if (!schoolGeneralId.equals(userSchoolId) && UserContext.getRole() != RoleEnums.SUPER_ADMIN)
+        if (!schoolAuthService.canUserAccessSchool(userId, schoolGeneralId)
+                && UserContext.getRole() != RoleEnums.SUPER_ADMIN)
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not authorized to update this school");
 
         SchoolResponse school = schoolService.update(schoolRequest, schoolGeneralId);
@@ -116,13 +115,15 @@ public class SchoolController {
 
     }
 
-    @GetMapping("/form-progress")
+    @GetMapping("/{schoolId}/form-progress")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<ApiResponse<SchoolProgressResponse>> getFormProgress() {
+    public ResponseEntity<ApiResponse<SchoolProgressResponse>> getFormProgress(@PathVariable UUID schoolId) {
 
-        JwtUserResponse user = UserContext.getCurrentUser();
+        UUID userId = UserContext.getCurrentUserId();
 
-        UUID schoolId = user.getSchoolId();
+        if (!schoolAuthService.canUserAccessSchool(userId, schoolId)
+                && UserContext.getRole() != RoleEnums.SUPER_ADMIN)
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not authorized to update this school");
 
         SchoolProgressResponse schoolProgressResponse = schoolService.getFormProgress(schoolId);
 

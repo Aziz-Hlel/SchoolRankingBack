@@ -19,7 +19,7 @@ public class SchoolRankingApplication {
 
 	@GetMapping
 	public String getMethodName() {
-		return "scwx";
+		return "scwxxxx";
 	};
 
 }

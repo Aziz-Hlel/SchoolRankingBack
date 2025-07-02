@@ -19,23 +19,30 @@ import com.example.TechnoShark.SchoolRanking.Enums.RoleEnums;
 import com.example.TechnoShark.SchoolRanking.SchoolMedia.DTO.SchoolMediaResponse;
 import com.example.TechnoShark.SchoolRanking.SchoolMedia.DTO.SchoolMediaRequest;
 import com.example.TechnoShark.SchoolRanking.SchoolMedia.Service.SchoolMediaService;
+import com.example.TechnoShark.SchoolRanking.UserSchool.Service.SchoolAuthorizationService;
 import com.example.TechnoShark.SchoolRanking.Utils.ApiResponse;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping("/school-media")
+@RequestMapping("/schools/{schoolId}/school-media")
 @AllArgsConstructor
 public class SchoolMediaContoller {
 
     private final SchoolMediaService school_MediaService;
+    private final SchoolAuthorizationService schoolAuthService;
 
     @PostMapping({ "", "/" })
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<ApiResponse<UUID>> create(@RequestBody @Valid SchoolMediaRequest school_MediaRequest) {
+    public ResponseEntity<ApiResponse<UUID>> create(
+            @PathVariable UUID schoolId,
+            @RequestBody @Valid SchoolMediaRequest school_MediaRequest) {
 
-        UUID schoolId = UserContext.getCurrentSchoolId();
+        UUID userId = UserContext.getCurrentUserId();
+
+        if (!schoolAuthService.canUserAccessSchool(userId, schoolId) && UserContext.getRole() != RoleEnums.SUPER_ADMIN)
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not authorized to update this school");
 
         UUID schoolMediaId = school_MediaService.create(school_MediaRequest, schoolId);
 
@@ -50,12 +57,14 @@ public class SchoolMediaContoller {
 
     @PutMapping("/{schoolMediaId}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<String> update(@PathVariable UUID schoolMediaId,
+    public ResponseEntity<String> update(
+            @PathVariable UUID schoolId,
+            @PathVariable UUID schoolMediaId,
             @RequestBody @Valid SchoolMediaRequest school_MediaRequest) {
 
-        UUID userSchoolId = UserContext.getCurrentSchoolId();
+        UUID userId = UserContext.getCurrentUserId();
 
-        if (!schoolMediaId.equals(userSchoolId) && UserContext.getRole() != RoleEnums.SUPER_ADMIN)
+        if (!schoolAuthService.canUserAccessSchool(userId, schoolId) && UserContext.getRole() != RoleEnums.SUPER_ADMIN)
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not authorized to update this school");
 
         String schooldId = school_MediaService.update(school_MediaRequest, schoolMediaId);

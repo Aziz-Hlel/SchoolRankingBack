@@ -94,7 +94,7 @@ public class SchoolSeeder {
         return LocalDate.ofEpochDay(randomDay);
     }
 
-    private School createGeneralSchool(int i, int currentForm, boolean isCompleted) {
+    private School createGeneralSchool(int i) {
 
         School schoolEntity = new School();
         schoolEntity.setName("school" + i);
@@ -106,8 +106,6 @@ public class SchoolSeeder {
         schoolEntity.setYearEstablished(2000 + i);
         schoolEntity.setType(getRandomEnumValue(SchoolTypeEnums.class));
         schoolEntity.setWebsite("https://school" + i + ".tn");
-        schoolEntity.setLastFormStep(currentForm);
-        schoolEntity.setFormsCompleted(isCompleted);
 
         return schoolEntity;
     }
@@ -184,21 +182,23 @@ public class SchoolSeeder {
 
         School school = null;
 
-        // School schoolEntity = createGeneralSchool(i, currentForm, isCompleted);
+        School schoolEntity = createGeneralSchool(i);
+        schoolEntity.setLastFormStep(currentForm);
+        schoolEntity.setFormsCompleted(isCompleted);
 
-        // SchoolAcademics academicsEntity = createAcademics(i, schoolEntity);
-        // schoolAcademicsRepo.save(academicsEntity);
+        SchoolAcademics academicsEntity = createAcademics(i, schoolEntity);
+        schoolAcademicsRepo.save(academicsEntity);
 
-        // SchoolFacilities schoolFacilitiesEntity = creatSchoolFacilities(i,schoolEntity);
-        // schoolFacilitiesRepo.save(schoolFacilitiesEntity);
+        SchoolFacilities schoolFacilitiesEntity = creatSchoolFacilities(i, schoolEntity);
+        schoolFacilitiesRepo.save(schoolFacilitiesEntity);
 
-        // school = schoolRepo.save(schoolEntity);
+        school = schoolRepo.save(schoolEntity);
 
-        // SchoolStaff schoolStaffEntity = createSchoolStaff(i, school);
-        // schoolStaffRepo.save(schoolStaffEntity);
+        SchoolStaff schoolStaffEntity = createSchoolStaff(i, school);
+        schoolStaffRepo.save(schoolStaffEntity);
 
-        // SchoolMedia schoolMediaEntity = creatSchoolMedia(i, school);
-        // schoolMediaRepo.save(schoolMediaEntity);
+        SchoolMedia schoolMediaEntity = creatSchoolMedia(i, school);
+        schoolMediaRepo.save(schoolMediaEntity);
 
         User useEntity = User.builder()
                 .firstName("Admin")
@@ -206,7 +206,6 @@ public class SchoolSeeder {
                 .email("admin@example.com")
                 .password(passwordEncoder.encode("admin"))
                 .role(RoleEnums.ADMIN)
-                .school(school) // Set school reference
                 .build();
 
         userRepo.save(useEntity);
@@ -223,70 +222,31 @@ public class SchoolSeeder {
         for (int i = 1; i <= numberOfSeeds; i++) {
 
             // --- 2. Create School ---
-            School school = new School();
-            school.setName("school" + i);
-            school.setCountry(getRandomEnumValue(CountryEnums.class));
-            school.setCity("city" + i);
-            school.setAddress("adress" + i);
-            school.setPhoneNumber("0000000" + i);
-            school.setEmail("school" + i + "@example.com");
-            school.setYearEstablished(2000 + i);
-            school.setType(getRandomEnumValue(SchoolTypeEnums.class));
-            school.setWebsite("https://school" + i + ".tn");
+            School school = createGeneralSchool(i);
 
             school.setFormsCompleted(true);
+            school.setLastFormStep(5);
 
             // --- 3. Create Academics BEFORE saving school ---
-            SchoolAcademics academics = new SchoolAcademics();
-            academics.setSchool(school); // Set the school reference
-            academics.setAccreditationDocsLinks("school" + i + ".com/accreditationDocsLinks");
-            academics.setLanguagesOfInstruction(getNumberofLanguagesOfInstruction());
-            academics.setCurriculums(getRandomEnumSet(CurriculumEnums.class));
-            academics.setInternationalAccreditations(getRandomEnumSet(AccreditationEnums.class));
-            academics.setLevelsOffered(getRandomEnumSet(LevelEnums.class));
-
+            SchoolAcademics academicsEntity = createAcademics(i, school);
+            // schoolAcademicsRepo.save(academicsEntity);
             // Set the relationship on both sides
-            school.setSchoolAcademics(academics);
+            school.setSchoolAcademics(academicsEntity);
 
             // --- 5. Save ONLY the User (it will cascade to save School and Academics) ---
 
-            SchoolFacilities facilities = new SchoolFacilities();
-            facilities.setAccessibilityFeatures(getRandomEnumSet(AccessibilityEnums.class));
-            facilities.setFacilities(getRandomEnumSet(FacilityEnums.class));
-            facilities.setSustainabilityPractices(getRandomEnumSet(SustainabilityEnums.class));
-            facilities.setUniversityDestinations(Set.of("university destination 1",
-                    "university destination 2"));
-            facilities.setCsrActivities("school" + i + " csr activities");
-            facilities.setIndustryPartnerships(Set.of("industry partnership 1", "industry partnership 2"));
-            facilities.setSafetyCompliance(getRandomBoolean());
-            facilities.setAiIntegration(getRandomBoolean());
-            facilities.setTechnologyReadiness(getRandomEnumValue(RatingLevelEnums.class));
-            facilities.setAwardsAndRecognitions("school" + i + " awards and recognitions");
+            SchoolFacilities schoolFacilitiesEntity = creatSchoolFacilities(i, school);
+            // schoolFacilitiesRepo.save(schoolFacilitiesEntity);
+            school.setSchoolFacilities(schoolFacilitiesEntity);
 
-            facilities.setSchool(school);
-            school.setSchoolFacilities(facilities);
+            SchoolMedia mediaEntity = creatSchoolMedia(i, school);
 
-            SchoolMedia media = new SchoolMedia();
-            media.setBqaReportLink("https://school" + i + ".com/bqaReportLink");
-            media.setBrochureLink("https://school\" + i + \".com/BrochureLink");
-            media.setGalleryLink("https://school" + i + ".com/GalleryLink");
-            media.setVideoTourLink("https://school" + i + ".com/VideoTourLink");
+            school.setSchoolMedia(mediaEntity);
 
-            media.setSchool(school);
-            school.setSchoolMedia(media);
+            SchoolStaff staffEntity = createSchoolStaff(i, school);
+            school.setSchoolStaff(staffEntity);
 
-            SchoolStaff staff = new SchoolStaff();
-            staff.setLeadershipProfileLink("https://school" + i + ".com/LeadershipProfileLink");
-            staff.setLeadershipTeam("school" + i + " leadership team");
-            staff.setProfessionalDevelopment("school" + i + " professional development");
-            staff.setStaffSizeEstimate(getRandomNumber(5, 50));
-            staff.setTeacherLanguages(getRandomEnumSet(LanguageEnums.class));
-            staff.setTeacherNationalities(getRandomEnumSet(CountryEnums.class));
-            staff.setTeacherQualifications("school" + i + " teacher qualifications");
-            staff.setLastInspectionDate(getRandomLocalDate(LocalDate.of(2000, 1, 1), LocalDate.of(2025, 1, 1)));
-
-            staff.setSchool(school);
-            school.setSchoolStaff(staff);
+            school = schoolRepo.save(school);
 
             // --- 4. Create User ---
             User user = User.builder()
@@ -295,14 +255,11 @@ public class SchoolSeeder {
                     .email("admin" + i + "@example.com")
                     .password(passwordEncoder.encode("admin" + i))
                     .role(RoleEnums.ADMIN)
-                    .school(school) // Set school reference
                     .build();
-
-            school.setUser(user);
 
             user = userRepo.save(user);
 
-            log.info("School created with id: {}", user.getSchool().getSchoolAcademics().getId().toString());
+            log.info("School created with id: {}");
         }
 
     }

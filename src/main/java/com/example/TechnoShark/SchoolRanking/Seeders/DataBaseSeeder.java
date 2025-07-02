@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 // @Profile({"dev", "stage"})
-//@Profile("!test") prevents seeding during unit tests, which is standard practice.
+@Profile("!test") // prevents seeding during unit tests, which is standard practice.
 // @EventListener(ApplicationReadyEvent.class)
 @Component
 @RequiredArgsConstructor

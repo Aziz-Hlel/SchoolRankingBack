@@ -4,5 +4,6 @@ import java.util.UUID;
 
 import com.example.TechnoShark.SchoolRanking.Enums.RoleEnums;
 
-public record UserResponse(UUID id, String firstName, String lastName, UUID schoolId, RoleEnums role, String email) {
+// TODO: add nbr of schools , nbr of schools comlpleted, schools name , you figuire out l8er
+public record UserResponse(UUID id, String firstName, String lastName, RoleEnums role, String email) {
 }

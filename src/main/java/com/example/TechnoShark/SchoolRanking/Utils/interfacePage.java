@@ -2,8 +2,6 @@ package com.example.TechnoShark.SchoolRanking.Utils;
 
 import java.util.List;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 
 public interface interfacePage {
 

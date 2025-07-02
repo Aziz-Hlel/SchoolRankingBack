@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,21 +19,29 @@ import com.example.TechnoShark.SchoolRanking.Enums.RoleEnums;
 import com.example.TechnoShark.SchoolRanking.SchoolFacilities.DTO.SchoolFacilitiesRequest;
 import com.example.TechnoShark.SchoolRanking.SchoolFacilities.DTO.SchoolFacilitiesResponse;
 import com.example.TechnoShark.SchoolRanking.SchoolFacilities.Service.SchoolFacilitiesService;
+import com.example.TechnoShark.SchoolRanking.UserSchool.Service.SchoolAuthorizationService;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping("/school-facilities")
+@RequestMapping("/schools/{schoolId}/school-facilities")
 @AllArgsConstructor
 public class SchoolFacilitiesController {
 
     private final SchoolFacilitiesService schoolFacilitiesService;
+    private final SchoolAuthorizationService schoolAuthService;
 
     @PostMapping({ "", "/" })
-    public ResponseEntity<UUID> post(@Valid @RequestBody SchoolFacilitiesRequest schoolFacilitiesRequest) {
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<UUID> post(
+            @PathVariable UUID schoolId,
+            @Valid @RequestBody SchoolFacilitiesRequest schoolFacilitiesRequest) {
 
-        UUID schoolId = UserContext.getCurrentSchoolId();
+        UUID userId = UserContext.getCurrentUserId();
+
+        if (!schoolAuthService.canUserAccessSchool(userId, schoolId) && UserContext.getRole() != RoleEnums.SUPER_ADMIN)
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not authorized to update this school");
 
         UUID schoolFacilitiesId = schoolFacilitiesService.createSchoolFacilities(schoolFacilitiesRequest, schoolId);
 
@@ -41,12 +50,15 @@ public class SchoolFacilitiesController {
     }
 
     @PutMapping("/{schoolFacilitiesId}")
-    public ResponseEntity<SchoolFacilitiesResponse> put(@PathVariable UUID schoolFacilitiesId,
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<SchoolFacilitiesResponse> put(
+            @PathVariable UUID schoolId,
+            @PathVariable UUID schoolFacilitiesId,
             @Valid @RequestBody SchoolFacilitiesRequest schoolFacilitiesRequest) {
 
-        UUID userSchoolId = UserContext.getCurrentSchoolId();
+        UUID userId = UserContext.getCurrentUserId();
 
-        if (!schoolFacilitiesId.equals(userSchoolId) && UserContext.getRole() != RoleEnums.SUPER_ADMIN)
+        if (!schoolAuthService.canUserAccessSchool(userId, schoolId) && UserContext.getRole() != RoleEnums.SUPER_ADMIN)
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not authorized to update this school");
 
         SchoolFacilitiesResponse updatedEntity = schoolFacilitiesService.updateSchoolFacilities(schoolFacilitiesRequest,

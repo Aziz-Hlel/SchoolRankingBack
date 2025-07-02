@@ -18,26 +18,28 @@ import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolResponse;
 import com.example.TechnoShark.SchoolRanking.Schools.Mapper.SchoolMapper;
 import com.example.TechnoShark.SchoolRanking.Schools.Model.School;
 import com.example.TechnoShark.SchoolRanking.Schools.Repo.SchoolRepo;
+import com.example.TechnoShark.SchoolRanking.UserSchool.Model.UserSchool;
+import com.example.TechnoShark.SchoolRanking.UserSchool.Repo.UserSchoolRepo;
 import com.example.TechnoShark.SchoolRanking.Users.Model.User;
-import com.example.TechnoShark.SchoolRanking.Users.Repo.UserRepo;
 
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Transactional
 @AllArgsConstructor
 @Slf4j
 public class SchoolService {
 
     private SchoolRepo schoolRepo;
-    private UserRepo userRepo;
+    private final UserSchoolRepo userSchoolRepo;
 
     private final SchoolMapper schoolMapper;
 
     private final EntityManager entityManager;
 
-    @Transactional
+    
     public String create(SchoolRequest schoolRequest, UUID userId) {
 
         User user = entityManager.getReference(User.class, userId);
@@ -46,13 +48,18 @@ public class SchoolService {
 
         School school = schoolRepo.save(entity);
 
-        user.setSchool(school);
-        userRepo.save(user);
+        UserSchool userSchoolEntity = new UserSchool();
+
+        userSchoolEntity.setUser(user);
+        userSchoolEntity.setSchool(school);
+        userSchoolRepo.save(userSchoolEntity);
+
+
         return school.getId().toString();
 
     }
 
-    @Transactional
+    
     public SchoolResponse update(SchoolRequest schoolRequest, UUID schoolId) {
 
         School existingSchool = schoolRepo.findById(schoolId)
@@ -82,7 +89,7 @@ public class SchoolService {
         return page;
     }
 
-    @Transactional
+    
     public SchoolDetailedResponse2 getDetailed(UUID schoolId) {
         // ! add condition to check if user is the school's owner or he ADMIN
         School school = schoolRepo.findWithDetailsById(schoolId)
@@ -90,12 +97,8 @@ public class SchoolService {
         return schoolMapper.toDetailedDto2(school);
     }
 
-    @Transactional
+    
     public SchoolProgressResponse getFormProgress(UUID schoolId) {
-
-        if (schoolId == null) {
-            return new SchoolProgressResponse(false, 0);
-        }
 
         School school = schoolRepo.findById(schoolId)
                 .orElseThrow(() -> new ResourceNotFoundException("School not found"));

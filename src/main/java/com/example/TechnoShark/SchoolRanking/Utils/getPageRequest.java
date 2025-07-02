@@ -1,6 +1,5 @@
 package com.example.TechnoShark.SchoolRanking.Utils;
 
-import java.util.HashSet;
 import java.util.List;
 
 import jakarta.validation.constraints.Max;
@@ -8,7 +7,7 @@ import jakarta.validation.constraints.Min;
 import lombok.Data;
 
 @Data
-public class getPageRequest<T extends HashSet> {
+public class getPageRequest<T> {
 
     @Min(1)
     private int page = 1;

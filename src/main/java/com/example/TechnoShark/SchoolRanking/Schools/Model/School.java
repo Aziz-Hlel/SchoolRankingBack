@@ -1,6 +1,10 @@
 package com.example.TechnoShark.SchoolRanking.Schools.Model;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import com.example.TechnoShark.SchoolRanking.Enums.CountryEnums;
 import com.example.TechnoShark.SchoolRanking.Enums.SchoolTypeEnums;
@@ -8,7 +12,6 @@ import com.example.TechnoShark.SchoolRanking.SchoolAcademics.Model.SchoolAcademi
 import com.example.TechnoShark.SchoolRanking.SchoolFacilities.Model.SchoolFacilities;
 import com.example.TechnoShark.SchoolRanking.SchoolMedia.Model.SchoolMedia;
 import com.example.TechnoShark.SchoolRanking.SchoolStaff.Model.SchoolStaff;
-import com.example.TechnoShark.SchoolRanking.Users.Model.User;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -72,9 +75,6 @@ public class School {
     @Column(nullable = true)
     private Integer lastFormStep = 0;
 
-    @OneToOne(mappedBy = "school", fetch = FetchType.LAZY, optional = true)
-    private User user;
-
     @OneToOne(mappedBy = "school", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
     private SchoolStaff schoolStaff;
 
@@ -86,5 +86,14 @@ public class School {
 
     @OneToOne(mappedBy = "school", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
     private SchoolAcademics schoolAcademics;
+
+    // Add audit fields - industry standard
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
 
 }

@@ -2,7 +2,6 @@ package com.example.TechnoShark.SchoolRanking.Auth.Model;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.UUID;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -61,13 +60,11 @@ public class CustomUserDetails implements UserDetails {
 
     public JwtUserResponse getUser() {
 
-        UUID schoolId = user.getSchool() != null ? user.getSchool().getId() : null;
         JwtUserResponse jwtUser = new JwtUserResponse(
                 user.getId(),
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
-                schoolId,
                 user.getRole());
 
         return jwtUser;

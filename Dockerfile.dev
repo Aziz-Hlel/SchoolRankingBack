@@ -26,5 +26,5 @@ EXPOSE 8080
 # This runs the app with the Maven Spring Boot plugin which supports dev tools
 CMD ["mvn", "spring-boot:run", "-Dspring-boot.run.profiles=dev"]
 
-# Alternative for Gradle users:
-# CMD ["./gradlew", "bootRun", "--args='--spring.profiles.active=dev'"]
+# Use spring-boot:run to trigger devtools-aware app startup
+# CMD ["sh", "-c", "while true; do mvn compile && mvn spring-boot:run -Dspring-boot.run.profiles=dev; done"]

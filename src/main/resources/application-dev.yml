@@ -6,3 +6,15 @@ app: # like .env retreived in AppProperties
     secret: dGhpc2lzYXZlcnlsb25nc2VjcmV0a2V5Zm9yand0dG9rZW5nZW5lcmF0aW9uYW5kdmFsaWRhdGlvbg==
     access-token-expiration: 900000      # 15 minutes
     refresh-token-expiration: 604800000  # 7 days
+
+
+spring : 
+  devtools :
+    restart : 
+      enabled : true  # Enables live reload in docker 
+    livereload :
+      enabled : true  # Enables live reload in docker 
+
+  jpa: 
+    hibernate:
+      ddl-auto: create-drop 

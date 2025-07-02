@@ -5,7 +5,6 @@ import java.util.UUID;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.springframework.data.domain.Page;
 
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolDetailedResponse;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolDetailedResponse2;
@@ -35,27 +34,36 @@ public interface SchoolMapper {
     @Mapping(target = "schoolStaff", ignore = true)
     @Mapping(target = "formsCompleted", ignore = true)
     @Mapping(target = "lastFormStep", constant = "1")
-    School toEntity(SchoolRequest dto, User user);
+    public abstract School toEntity(SchoolRequest dto, User user);
+
+    // @AfterMapping
+    // protected void addSchoolToUser(@MappingTarget School school, User user) {
+    // if (user != null && school != null) {
+    // user.addSchool(school);
+    // }
+    // }
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "user", ignore = true)
     @Mapping(target = "schoolAcademics", ignore = true)
     @Mapping(target = "schoolFacilities", ignore = true)
     @Mapping(target = "schoolMedia", ignore = true)
     @Mapping(target = "schoolStaff", ignore = true)
     @Mapping(target = "formsCompleted", ignore = true)
     @Mapping(target = "lastFormStep", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     School updateSchoolFromDto(SchoolRequest dto, @MappingTarget School entity);
 
-    SchoolResponse toDto(School school);
+    public abstract SchoolResponse toDto(School school);
 
-    default String mapAdminUsername(School school) {
-        if (school.getUser() == null)
-            return null;
-        return school.getUser().getFirstName() + " " + school.getUser().getLastName();
-    }
+    // default String mapAdminUsername(School school) {
+    // if (school.getUser() == null)
+    // return null;
+    // return school.getUser().getFirstName() + " " +
+    // school.getUser().getLastName();
+    // }
 
-    @Mapping(target = "adminUsername", expression = "java(mapAdminUsername(school))")
+    @Mapping(target = "adminUsername", constant = "admin") // expression = "java(mapAdminUsername(school))")
     @Mapping(target = "isComplete", source = "formsCompleted")
     SchoolPageResponse toPageDto(School school);
 

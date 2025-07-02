@@ -5,15 +5,11 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,10 +25,8 @@ import com.example.TechnoShark.SchoolRanking.Auth.DTO.TokenRefreshResponse;
 import com.example.TechnoShark.SchoolRanking.Auth.Model.CustomUserDetails;
 import com.example.TechnoShark.SchoolRanking.Auth.Service.CustomUserDetailsService;
 import com.example.TechnoShark.SchoolRanking.Auth.Service.JwtService;
-import com.example.TechnoShark.SchoolRanking.Auth.Util.UserContext;
 import com.example.TechnoShark.SchoolRanking.Config.JwtProperties;
 import com.example.TechnoShark.SchoolRanking.ErrorHandler.Exceptions.InvalidTokenException;
-import com.example.TechnoShark.SchoolRanking.Users.Model.User;
 import com.example.TechnoShark.SchoolRanking.Utils.ApiResponse;
 
 import io.jsonwebtoken.ExpiredJwtException;

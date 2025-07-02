@@ -13,4 +13,6 @@ public interface SchoolRepo extends JpaRepository<School, UUID> {
     @EntityGraph(attributePaths = { "schoolAcademics", "schoolFacilities", "schoolMedia", "schoolStaff" })
     Optional<School> findWithDetailsById(UUID id);
 
+
+
 }
