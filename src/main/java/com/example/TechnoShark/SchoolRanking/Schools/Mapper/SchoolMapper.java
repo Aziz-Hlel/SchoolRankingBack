@@ -1,11 +1,13 @@
 package com.example.TechnoShark.SchoolRanking.Schools.Mapper;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
+import com.example.TechnoShark.SchoolRanking.Schools.DTO.MySchoolsPreview;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolDetailedResponse;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolDetailedResponse2;
 import com.example.TechnoShark.SchoolRanking.Schools.DTO.SchoolPageResponse;
@@ -67,11 +69,13 @@ public interface SchoolMapper {
     @Mapping(target = "isComplete", source = "formsCompleted")
     SchoolPageResponse toPageDto(School school);
 
-    SchoolDetailedResponse toDetailedDto(School school);
+    SchoolDetailedResponse toDetailedDto(School school);   
 
     @Mapping(target = "schoolGeneral", source = "school")
     SchoolDetailedResponse2 toDetailedDto2(School school);
 
     SchoolProgressResponse toProgressDto(School school);
+
+    public abstract List<MySchoolsPreview> toSideBarSchoolDto(List<School> schools);
 
 }

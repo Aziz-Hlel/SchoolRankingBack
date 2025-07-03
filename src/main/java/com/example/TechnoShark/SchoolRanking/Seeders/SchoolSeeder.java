@@ -33,6 +33,8 @@ import com.example.TechnoShark.SchoolRanking.SchoolStaff.Model.SchoolStaff;
 import com.example.TechnoShark.SchoolRanking.SchoolStaff.Repo.SchoolStaffRepo;
 import com.example.TechnoShark.SchoolRanking.Schools.Model.School;
 import com.example.TechnoShark.SchoolRanking.Schools.Repo.SchoolRepo;
+import com.example.TechnoShark.SchoolRanking.UserSchool.Model.UserSchool;
+import com.example.TechnoShark.SchoolRanking.UserSchool.Repo.UserSchoolRepo;
 import com.example.TechnoShark.SchoolRanking.Users.Model.User;
 import com.example.TechnoShark.SchoolRanking.Users.Repo.UserRepo;
 import com.example.TechnoShark.SchoolRanking.Utils.CurrentProgressForm;
@@ -47,6 +49,7 @@ import lombok.extern.slf4j.Slf4j;
 public class SchoolSeeder {
     private final UserRepo userRepo;
     private final SchoolRepo schoolRepo;
+    private final UserSchoolRepo userSchoolRepo;
     private final SchoolAcademicsRepo schoolAcademicsRepo;
     private final SchoolFacilitiesRepo schoolFacilitiesRepo;
     private final SchoolStaffRepo schoolStaffRepo;
@@ -177,8 +180,8 @@ public class SchoolSeeder {
     private void createCustomUser() {
 
         int currentForm = CurrentProgressForm.SCHOOL_GENERAL;// CurrentProgressForm.SCHOOL_MEDIA;
-        boolean isCompleted = false;
-        int i = 0;
+        boolean isCompleted = true;
+        int i = 5;
 
         School school = null;
 
@@ -262,6 +265,43 @@ public class SchoolSeeder {
             log.info("School created with id: {}");
         }
 
+        User user = userRepo.findByEmail("admin@example.com").orElse(null);
+
+        for (int i = 100; i <= 104; i++) {
+
+            // --- 2. Create School ---
+            School school = createGeneralSchool(i);
+
+            school.setFormsCompleted(true);
+            school.setLastFormStep(5);
+
+            // --- 3. Create Academics BEFORE saving school ---
+            SchoolAcademics academicsEntity = createAcademics(i, school);
+            // schoolAcademicsRepo.save(academicsEntity);
+            // Set the relationship on both sides
+            school.setSchoolAcademics(academicsEntity);
+
+            // --- 5. Save ONLY the User (it will cascade to save School and Academics) ---
+
+            SchoolFacilities schoolFacilitiesEntity = creatSchoolFacilities(i, school);
+            // schoolFacilitiesRepo.save(schoolFacilitiesEntity);
+            school.setSchoolFacilities(schoolFacilitiesEntity);
+
+            SchoolMedia mediaEntity = creatSchoolMedia(i, school);
+
+            school.setSchoolMedia(mediaEntity);
+
+            SchoolStaff staffEntity = createSchoolStaff(i, school);
+            school.setSchoolStaff(staffEntity);
+
+            school = schoolRepo.save(school);
+
+            UserSchool userSchool = new UserSchool();
+            userSchool.setUser(user);
+            userSchool.setSchool(school);
+            userSchoolRepo.save(userSchool);
+            log.info("School created with id: {}");
+        }
     }
 
 }
