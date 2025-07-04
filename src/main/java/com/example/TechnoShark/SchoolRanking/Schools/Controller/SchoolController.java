@@ -46,13 +46,20 @@ public class SchoolController {
 
     @PostMapping({ "", "/" })
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<String> createSchool(@Valid @RequestBody SchoolRequest schoolRequest) {
+    public ResponseEntity<ApiResponse<UUID>> createSchool(@Valid @RequestBody SchoolRequest schoolRequest) {
 
         UUID userId = UserContext.getCurrentUserId();
 
-        String schooldId = schoolService.create(schoolRequest, userId);
+        UUID schooldId = schoolService.create(schoolRequest, userId);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(schooldId);
+        ApiResponse<UUID> apiResponse = ApiResponse.<UUID>builder()
+                .message("School created successfully")
+                .success(true)
+                .data(schooldId)
+                .timestamp(null)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
 
     @PutMapping({ "/{schoolGeneralId}" })
@@ -81,6 +88,7 @@ public class SchoolController {
     }
 
     @GetMapping({ "", "/" })
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<Page<SchoolPageResponse>>> getPageSchool(
             @Valid @ModelAttribute SchoolPageRequest schoolPageRequest) {
 
@@ -100,6 +108,7 @@ public class SchoolController {
     }
 
     @GetMapping("/infos/{schoolId}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<SchoolDetailedResponse2>> getDetailedSchool(@PathVariable UUID schoolId) {
         SchoolDetailedResponse2 school = schoolService.getDetailed(schoolId);
 

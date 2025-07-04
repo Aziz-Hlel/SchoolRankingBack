@@ -40,7 +40,7 @@ public class SchoolService {
     private final EntityManager entityManager;
 
     
-    public String create(SchoolRequest schoolRequest, UUID userId) {
+    public UUID create(SchoolRequest schoolRequest, UUID userId) {
 
         User user = entityManager.getReference(User.class, userId);
 
@@ -55,7 +55,7 @@ public class SchoolService {
         userSchoolRepo.save(userSchoolEntity);
 
 
-        return school.getId().toString();
+        return school.getId() ;
 
     }
 
