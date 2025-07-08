@@ -10,4 +10,4 @@ app: # like .env retreived in AppProperties
 spring:
   jpa: 
     hibernate:
-      ddl-auto: update 
+      ddl-auto: create
