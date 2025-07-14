@@ -1,6 +1,5 @@
 package com.example.TechnoShark.SchoolRanking.Seeders;
 
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +17,10 @@ public class AdminSeeder {
     private final PasswordEncoder passwordEncoder;
 
     public void createSuperAdmin(String firstName, String lastName, String email, String password) {
+
+        if (userRepo.findByEmail(email).isPresent())
+            return;
+
         User superAdmin = User.builder()
                 .firstName(firstName)
                 .lastName(lastName)
